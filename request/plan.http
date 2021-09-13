@@ -1,0 +1,34 @@
+### Get plan of user
+
+GET http://localhost:5000/app/api/v1/plans
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6W10sImlzVXNlciI6dHJ1ZSwiZW1haWwiOiJob2FuZ25ndXllbjEyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGhBLll4U0xkWUJCMGZidmtBRkh1aHUwL01zTHRVek9ycmJ6M0F0WWNtLmZMM2MwNXZNL2MuIiwiY3JlYXRlZEF0IjoiMjAyMS0wOC0xOFQxNDo0MDoyMS4wMDJaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0xOFQxNDo0MDoyMS4wMDJaIiwiaWQiOiI2MTFkMWJkNDdlNGM1NTI4MzQzZWY5MGEifSwiaWF0IjoxNjI5Mjk3NjM3LCJleHAiOjE2MjkzMDEyMzd9.8cNBf5ngtTG6FPErJo_JAyFIK2rlpqxOcHSOTjGT-PY
+
+### Create new plan 
+
+POST http://localhost:5000/app/api/v1/plans
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6W10sImlzVXNlciI6dHJ1ZSwiZW1haWwiOiJob2FuZ25ndXllbjEyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFZJRlBIZWt4cW4ucWdkUFVXVGlURmVtOE5DR0lTYkloWlRlY29aRGNlVFhlbU5hbVRXOFJpIiwiY3JlYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwiaWQiOiI2MTFmYjA5ZGI2MmU2NTNjNGM4NThhYjgifSwiaWF0IjoxNjI5NTMwNjkwLCJleHAiOjE2Mjk1NTk0OTB9.GHYwFbCLGSktjHSjfuTXPfcbkcHs4pyH4HXcIxnQQwE
+
+{
+    "name":"My trip",
+    "start": "2021-08-20T06:00:00",
+    "end": "2021-08-25T18:00:00",
+    "note": "Buy some souvenirs for children",
+    "photoUrl": "https://i.guim.co.uk/img/media/7a9001138004322d8e7aeefffab619081834aa6a/0_0_4256_2554/master/4256.jpg?width=1020&quality=85&auto=format&fit=max&s=372dd56211b6b16f084e8326069e5a05"
+}
+
+### Update isHidden
+DELETE   http://localhost:5000/app/api/v1/plans/6120b19d4fe4a229a8c32749
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6W10sImlzVXNlciI6dHJ1ZSwiZW1haWwiOiJob2FuZ25ndXllbjEyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFZJRlBIZWt4cW4ucWdkUFVXVGlURmVtOE5DR0lTYkloWlRlY29aRGNlVFhlbU5hbVRXOFJpIiwiY3JlYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwiaWQiOiI2MTFmYjA5ZGI2MmU2NTNjNGM4NThhYjgifSwiaWF0IjoxNjI5NTMwNjkwLCJleHAiOjE2Mjk1NTk0OTB9.GHYwFbCLGSktjHSjfuTXPfcbkcHs4pyH4HXcIxnQQwE
+
+### Update a plan 
+
+PUT http://localhost:5000/app/api/v1/plans/6120b3a62d25ff10bc0bb845
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6W10sImlzVXNlciI6dHJ1ZSwiZW1haWwiOiJob2FuZ25ndXllbjEyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFZJRlBIZWt4cW4ucWdkUFVXVGlURmVtOE5DR0lTYkloWlRlY29aRGNlVFhlbU5hbVRXOFJpIiwiY3JlYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwiaWQiOiI2MTFmYjA5ZGI2MmU2NTNjNGM4NThhYjgifSwiaWF0IjoxNjI5NTMwNjkwLCJleHAiOjE2Mjk1NTk0OTB9.GHYwFbCLGSktjHSjfuTXPfcbkcHs4pyH4HXcIxnQQwE
+
+{
+    "start": "2021-08-20T03:00:00"
+}

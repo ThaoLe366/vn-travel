@@ -1,0 +1,43 @@
+# @name login
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+Content-Type: application/json
+
+{
+    "email": "thaole301000@gmail.com",
+    "password" : "12345"
+}
+
+###
+@authToken = {{login.response.body.token}}
+###
+
+### Province
+###
+GET http://localhost:5000/app/api/v1/provinces
+Content-Type: application/json
+
+
+### 
+POST http://localhost:5000/app/api/v1/provinces/
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "name": "Quan 1",
+    "color":"#f5f5f5"
+}
+
+### 
+PUT http://localhost:5000/app/api/v1/provinces/611e2ace95dcd508f4706781
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "name": "Quan 12",
+    "color":"#0000"
+}
+
+### 
+DELETE  http://localhost:5000/app/api/v1/provinces/611e2ace95dcd508f4706781
+Content-Type: application/json
+Authorization: token {{authToken}}

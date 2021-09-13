@@ -1,0 +1,63 @@
+
+# @name login
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+Content-Type: application/json
+
+{
+    "email": "thaole301000@gmail.com",
+    "password" : "12345"
+}
+
+###
+@authToken = {{login.response.body.token}}
+###
+
+### Create new place
+POST http://localhost:5000/app/api/v1/places
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "name": "Chùa một cột HN",
+    "description": "Phố cổ Hội An là một thành phố nổi tiếng của tỉnh Quảng Nam, một phố cổ giữ được gần như nguyên vẹn với hơn 1000 di tích kiến trúc từ phố xá, nhà cửa, hội quán, đình, chùa, miếu, nhà thờ tộc, giếng cổ… đến các món ăn truyền thống, tâm hồn của người dân nơi đây. Một lần du lịch Hội An sẽ làm say đắm lòng du khách bởi những nét đẹp trường tồn cùng thời gian, vô cùng mộc mạc, bình dị.",
+    "longtitude": 15.8801,
+    "lattitude": 108.3380,
+    "tags":[],
+    "rate": 5,
+    "weight": 10,
+    "province" :"611e2ab795dcd508f470677d",
+    "category":"612f41c7e410f520706e6428",
+    "startPrice":"20000",
+    "endPrice":"80000",
+    "closeTime": 18.5,
+    "openTime": 7.5
+
+}
+### Add image to place
+PUT http://localhost:5000/app/api/v1/places/613add51a784f131b084e56e/images
+Content-Type: application/json
+
+{
+    images:"https://cdnmedia.thethaovanhoa.vn/Upload/tyTrfgkgEUQwPYuvZ4Kn1g/files/2019/07/1607/hoi-an.jpghttps://cdnmedia.thethaovanhoa.vn/Upload/tyTrfgkgEUQwPYuvZ4Kn1g/files/2019/07/1607/hoi-an.jpg"
+}
+### Get place
+
+GET http://localhost:5000/app/api/v1/places/613b1da30ea0491390fa5bb0?populate=true
+Content-Type: application/json
+
+
+### Get places
+
+GET http://localhost:5000/app/api/v1/places?populate=true
+Content-Type: application/json
+
+### Update images inplace
+PUT http://localhost:5000/app/api/v1/places/613b1da30ea0491390fa5bb0/images
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "id":"613b1da30ea0491390fa5bb0",
+    "images":["https://cdn1.nhatrangtoday.vn/images/photos/kinh-nghiem-dat-ve-xe-nha-trang-da-lat-1.jpg","https://www.vietnambooking.com/wp-content/uploads/2020/12/kinh-nghiem-di-da-lat-thang-12-1.jpg"
+    ]
+}
