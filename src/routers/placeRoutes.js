@@ -6,6 +6,37 @@ const requireRole = require("../middleware/requireRole");
 const { formatTimeUTC } = require("../utils/Timezone");
 const { STATUS } = require("../models/enum");
 
+//@route GET v1/places/private
+//@desc Get all places (public vs private)
+//@access public
+//@role any
+router.get("/private", async (req, res) => {
+  try {
+    let placeList = [];
+    if (req.query.populate == "true") {
+      //Get object foreign key
+      placeList = await Place.find()
+        .populate("province")
+        .populate("category")
+        .populate("tags")
+        .exec();
+    } else {
+      placeList = await Place.find();
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Get places successfully",
+      places: placeList,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+
 //@route GET v1/places
 //@desc Get all places
 //@access public
@@ -23,7 +54,7 @@ router.get("/", async (req, res) => {
         .populate("tags")
         .exec();
     } else {
-      placeList = await Place.find({ isHidden: false });
+      placeList = await Place.find({ status: STATUS.PUBLIC });
     }
     return res.status(200).json({
       success: true,
@@ -50,14 +81,13 @@ router.get("/:placeId", async (req, res) => {
     if (req.query.populate == "true") {
       //Get object foreign key
       placeList = await Place.find({
-        status: STATUS.PUBLIC,
         _id: filterById,
       })
         .populate("province")
         .populate("category")
         .exec();
     } else {
-      placeList = await Place.find({ isHidden: false, _id: filterById });
+      placeList = await Place.find({ status: STATUS.PUBLIC, _id: filterById });
     }
     return res.status(200).json({
       success: true,
@@ -104,10 +134,14 @@ router.post("/", requireAuth, async (req, res, next) =>
           message: "Create place unsuccessfully",
         });
       }
-      return res.status(200).json({
-        success: true,
-        message: "Create place successfully",
-        place: place,
+
+      Place.populate(place, ["category", "province"], function (err) {
+        console.log(139, place)
+        return res.status(200).json({
+          success: true,
+          message: "Create place successfully",
+          place: place,
+        });
       });
     } catch (error) {
       console.log(error);
@@ -128,12 +162,12 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
     try {
       let start = req.body.startPrice;
       let end = req.body.endPrice;
-      let states = "publicprivate"
+      let states = "publicprivate";
       let status = states.includes(req.body.status)
         ? req.body.status
-        :( req.body.status.includes('true')
+        : req.body.status.includes("true")
         ? STATUS.PUBLIC
-        : STATUS.PRIVATE);
+        : STATUS.PRIVATE;
       const placeUpdate = await Place.findOneAndUpdate(
         {
           _id: req.params.placeId,
@@ -160,14 +194,20 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
         },
         { new: true },
         function (err, documents) {
-          return res.status(200).json({
-            message: "Update successfully",
-            success: true,
-            place: documents,
-          });
+          console.log(err)
+          if (!err) {
+            Place.populate(documents, ["category", "province"], function (err) {
+              return res.status(200).json({
+                message: "Update successfully",
+                success: true,
+                place: documents,
+              });
+            });
+          }
         }
       );
     } catch (error) {
+      console.log(error.message);
       return res.status(500).json({
         message: "Internal server error",
         success: false,
@@ -242,10 +282,5 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
     }
   })
 );
-
-//@route PUT v1/places/:placeId/images
-//@desc Add image to place
-//@access private
-//@role
 
 module.exports = router;
