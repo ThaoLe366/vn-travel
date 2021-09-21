@@ -11,7 +11,7 @@ const { formatTimeUTC } = require("../utils/Timezone");
 //@role all
 router.get("/", async (req, res) => {
   try {
-    const tagList = await Tag.find({ isHidden: false });
+    const tagList = await Tag.find();
     return res.status(200).json({
       message: "Get all tag successfully",
       success: true,
@@ -34,7 +34,7 @@ router.post("/", requireAuth, async (req, res, next) =>
     try {
       let tag = new Tag({
         name: req.body.name,
-        isHidden: false,
+        isHidden: req.body.isHidden,
       });
       tag = await tag.save();
       return res.status(200).json({
@@ -65,6 +65,7 @@ router.put("/:tagId", requireAuth, async (req, res, next) =>
         },
         {
           name: req.body.name,
+          isHidden: req.body.isHidden,
           updatedAt: formatTimeUTC()
         },
         { new: true },
