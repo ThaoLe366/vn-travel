@@ -1,30 +1,30 @@
 # @name login
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users
 Content-Type: application/json
 
 {
-    "email": "thaole301000@gmail.com",
+    "email": "nguyenhoang13166@gmail.com",
     "password" : "12345"
 }
 
 ###
-@authToken = {{login.response.body.token}}
+@authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxMzFmZGY2MTk4ZGFjMzBlY2JmYTZjZCIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzEzNzQyNjQsImV4cCI6MTYzMTQwMzA2NH0.rCZNxIJLR53DJlM15gZV13QD17g2A2qsy9qUtWGKw_M"
 ###
 
 ### Province
 ###
-GET http://localhost:5000/app/api/v1/provinces
+GET https://vntravel-api.herokuapp.com/app/api/v1/provinces
 Content-Type: application/json
 
 
 ### 
-POST http://localhost:5000/app/api/v1/provinces/
+POST https://vntravel-api.herokuapp.com/app/api/v1/provinces/
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxMzFmZGY2MTk4ZGFjMzBlY2JmYTZjZCIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzEzNzQyNjQsImV4cCI6MTYzMTQwMzA2NH0.rCZNxIJLR53DJlM15gZV13QD17g2A2qsy9qUtWGKw_M
 
 {
-    "name": "Quan 1",
-    "color":"#f5f5f5"
+    "name": "Thừa Thiên Huế",
+    "color":"#AA5521"
 }
 
 ### 

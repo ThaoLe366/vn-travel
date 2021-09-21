@@ -11,7 +11,7 @@ const { formatTimeUTC } = require("../utils/Timezone");
 //@role any
 router.get("/", async (req, res) => {
   try {
-    const categoryList = await Category.find({ isHidden: false });
+    const categoryList = await Category.find();
     return res.status(200).json({
       message: "Get all category successfully",
       success: true,
@@ -35,7 +35,8 @@ router.post("/", requireAuth, async (req, res, next) =>
       let category = new Category({
         name: req.body.name,
         color: req.body.color,
-        isHidden: false,
+        isHidden: req.body.isHidden,
+
       });
 
       category = await category.save();
@@ -65,6 +66,7 @@ router.put("/:categoryId", requireAuth, async (req, res, next) =>
         {
           name: req.body.name,
           color: req.body.color,
+          isHidden: req.body.isHidden,
           updatedAt: formatTimeUTC()
         },
         { new: true },
