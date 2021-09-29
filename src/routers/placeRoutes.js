@@ -82,14 +82,7 @@ router.get("/:placeId", async (req, res) => {
       //Get object foreign key
       placeList = await Place.find({
         _id: filterById,
-<<<<<<< HEAD
       }).populate("province").populate('category').populate('tags').exec();
-=======
-      })
-        .populate("province")
-        .populate("category")
-        .exec();
->>>>>>> 1ac76eb52ac2c80a0fa524c43aa53e9f58e49a6d
     } else {
       placeList = await Place.find({ status: STATUS.PUBLIC, _id: filterById });
     }
@@ -140,7 +133,6 @@ router.post("/", requireAuth, async (req, res, next) =>
       }
 
       Place.populate(place, ["category", "province"], function (err) {
-        console.log(139, place)
         return res.status(200).json({
           success: true,
           message: "Create place successfully",
@@ -165,11 +157,6 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
   requireRole("admin", req, res, next, async (req, res, next) => {
     try {
       let start = req.body.startPrice;
-<<<<<<< HEAD
-      let end=req.body.endPrice;
-      
-       await Place.findOneAndUpdate(
-=======
       let end = req.body.endPrice;
       let states = "publicprivate";
       let status = states.includes(req.body.status)
@@ -178,7 +165,6 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
         ? STATUS.PUBLIC
         : STATUS.PRIVATE;
       const placeUpdate = await Place.findOneAndUpdate(
->>>>>>> 1ac76eb52ac2c80a0fa524c43aa53e9f58e49a6d
         {
           _id: req.params.placeId,
         },
@@ -206,7 +192,7 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
         function (err, documents) {
           console.log(err)
           if (!err) {
-            Place.populate(documents, ["category", "province"], function (err) {
+            Place.populate(documents, ["category", "province","tags"], function (err) {
               return res.status(200).json({
                 message: "Update successfully",
                 success: true,
