@@ -1,5 +1,5 @@
 # @name login
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
@@ -28,12 +28,13 @@ Authorization: token {{authToken}}
 }
 
 ### 
-PUT http://localhost:5000/app/api/v1/provinces/611e2ace95dcd508f4706781
+PUT https://vntravel-api.herokuapp.com/app/api/v1/provinces/614bdd73885f3700161f71c1
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-    "name": "Quan 12",
+    "name": "Hello 1",
+    "isHidden": false,
     "color":"#0000"
 }
 

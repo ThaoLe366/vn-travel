@@ -48,7 +48,7 @@ router.get("/:placeId", async (req, res) => {
       placeList = await Place.find({
         status: STATUS.PUBLIC,
         _id: filterById,
-      }).populate("province").populate('category').exec();
+      }).populate("province").populate('category').populate('tags').exec();
     } else {
       placeList = await Place.find({ isHidden: false, _id: filterById });
     }
@@ -123,7 +123,7 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
       let start = req.body.startPrice;
       let end=req.body.endPrice;
       
-      const placeUpdate = await Place.findOneAndUpdate(
+       await Place.findOneAndUpdate(
         {
           _id: req.params.placeId,
         },

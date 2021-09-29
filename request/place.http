@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ### Get places
 
-GET http://localhost:5000/app/api/v1/places?populate=true
+GET https://vntravel-api.herokuapp.com/app/api/v1/places/private?populate=true
 Content-Type: application/json
 
 ### Update images inplace

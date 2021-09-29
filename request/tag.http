@@ -10,12 +10,14 @@ Content-Type: application/json
 ###
 @authToken = {{login.response.body.token}}
 ###
-POST http://localhost:5000/app/api/v1/tags
+POST https://vntravel-api.herokuapp.com/app/api/v1/tags
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-   "name":"Cà phê lề đường"
+   "name":"Cà phê phố",
+   "isHidden":false
+
 }
 
 ###
@@ -23,13 +25,13 @@ GET http://localhost:5000/app/api/v1/tags
 Content-Type: application/json
 
 ###
-PUT http://localhost:5000/app/api/v1/tags/611e2598c801cc3d88bf0fe5
+PUT https://vntravel-api.herokuapp.com/app/api/v1/tags/613ea5e3a6243319d4e0cad3
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
    "name":"Chợ truyền thống 4",
-   "isHidden":"false"
+   "isHidden":"true"
 }
 
 ###

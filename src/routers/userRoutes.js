@@ -79,5 +79,32 @@ router.put("/favorite/:placeId", requireAuth, async (req, res) => {
     });
   }
 });
-
+//@route PUT v1/users
+//@desc Disable account user
+//@access private
+//@role admin
+router.put("/:userId/status", requireAuth, async (req, res, next) =>
+  requireRole("admin", req, res, next, async (req, res, next) => {
+    try {
+      const userUpdatedCondition = { _id: req.body.userAuth.id };
+      console.log(req.body)
+      const userUpdate = await User.findByIdAndUpdate(
+        userUpdatedCondition,
+        { $set: { isHidden: req.body.isHidden } },
+        { new: true }
+      );
+      return res.status(200).json({
+        success: true,
+        message: "Update success",
+        user: userUpdate,
+      });
+    } catch (error) {
+      console.log(err.message);
+      res.status(500).json({
+        success: false,
+        message: "Internal error server",
+      });
+    }
+  })
+);
 module.exports = router;

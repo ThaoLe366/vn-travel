@@ -37,6 +37,10 @@ const userSchema = mongoose.Schema({
   image:{
     type:String,
     default:"https://hinhnen123.com/wp-content/uploads/2021/06/avt-cute-9.jpg"
+  },
+  isHidden:{
+    type:Boolean,
+    default:false
   }
 });
 
