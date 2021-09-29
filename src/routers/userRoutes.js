@@ -86,18 +86,24 @@ router.put("/favorite/:placeId", requireAuth, async (req, res) => {
 router.put("/:userId/status", requireAuth, async (req, res, next) =>
   requireRole("admin", req, res, next, async (req, res, next) => {
     try {
-      const userUpdatedCondition = { _id: req.body.userAuth.id };
-      console.log(req.body)
-      const userUpdate = await User.findByIdAndUpdate(
+      const userUpdatedCondition = { _id: req.body.id };
+    await User.findByIdAndUpdate(
         userUpdatedCondition,
         { $set: { isHidden: req.body.isHidden } },
-        { new: true }
+        { new: true },
+        function (er,documents){
+            if(err){
+              User.populate(documents,["favorite"], function(err){
+                return res.status(200).json({
+                  success: true,
+                  message: "Update success",
+                  user: documents,
+                });
+              })
+            }
+        }
       );
-      return res.status(200).json({
-        success: true,
-        message: "Update success",
-        user: userUpdate,
-      });
+      
     } catch (error) {
       console.log(err.message);
       res.status(500).json({
