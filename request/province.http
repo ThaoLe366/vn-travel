@@ -1,9 +1,5 @@
 # @name login
-<<<<<<< HEAD
 POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
-=======
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users
->>>>>>> 1ac76eb52ac2c80a0fa524c43aa53e9f58e49a6d
 Content-Type: application/json
 
 {
