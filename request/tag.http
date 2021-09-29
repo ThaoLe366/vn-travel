@@ -1,5 +1,5 @@
 # @name login
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Authorization: token {{authToken}}
 }
 
 ###
-GET http://localhost:5000/app/api/v1/tags
+GET https://vntravel-api.herokuapp.com/app/api/v1/tags
 Content-Type: application/json
 
 ###
@@ -35,6 +35,6 @@ Authorization: token {{authToken}}
 }
 
 ###
-DELETE http://localhost:5000/app/api/v1/tags/611e2598c801cc3d88bf0fe5
+DELETE https://vntravel-api.herokuapp.com/app/api/v1/tags/6120b999cefe17339401199b
 Content-Type: application/json
 Authorization: token {{authToken}}

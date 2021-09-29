@@ -10,7 +10,7 @@ const { formatTimeUTC } = require("../utils/Timezone");
 //@role any
 router.get("/", async (req, res) => {
   try {
-    const provinceList = await Province.find({ isHidden: false });
+    const provinceList = await Province.find();
     return res.status(200).json({
       message: "Get all province successfully",
       success: true,
@@ -39,7 +39,7 @@ router.post("/", requireAuth, async (req, res, next) =>
       let province = new Province({
         name: req.body.name,
         color: req.body.color,
-        isHidden: false,
+        isHidden: req.body.isHidden,
       });
 
       province = await province.save();
@@ -69,6 +69,7 @@ router.put("/:provinceId", requireAuth, async (req, res, next) =>
         {
           name: req.body.name,
           color: req.body.color,
+          isHidden: req.body.isHidden,
           updatedAt: formatTimeUTC(),
         },
         { new: true },

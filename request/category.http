@@ -1,5 +1,5 @@
 # @name login
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ### Category
 ###
-GET http://localhost:5000/app/api/v1/categories
+GET https://vntravel-api.herokuapp.com/app/api/v1/categories
 Content-Type: application/json
 
 
@@ -29,13 +29,13 @@ Authorization: token {{authToken}}
 }
 
 ### 
-PUT http://localhost:5000/app/api/v1/categories/611e6df278854c213c98b306
+PUT https://vntravel-api.herokuapp.com/app/api/v1/categories/612f4c5dedf61b472ce3758d
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-    "name": "Candy",
-    "color":"#f5ee"
+    "name":"Entertainment",
+    "color":"#A4B114"
 }
 
 ### 
