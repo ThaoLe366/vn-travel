@@ -29,9 +29,18 @@ const requireAuth = async (req, res, next) => {
     const user = await googleAuth(token);
 
     let userMap = await User.findOne({ email: user.email });
-    req.body.userAuth = userMap;
-    req.headers.authorization = token;
-    next();
+
+    //Checked account is active
+    if (!userMap.isHidden) {
+      req.body.userAuth = userMap;
+      req.headers.authorization = token;
+      next();
+    } else {
+      res.status(403).json({
+        message: "Your account is blocked",
+        success: false,
+      });
+    }
   } catch (error) {
     //Login by enter email and password
     try {
@@ -39,16 +48,23 @@ const requireAuth = async (req, res, next) => {
       jwt.verify(token, process.env.SECRET_KEY, function (err, payload) {
         console.log(token);
         if (typeof payload != "undefined") {
-          user = payload.userAuth;
-          req.body.userAuth = user;
-          req.headers.authorization = token;
-          next();
-        }
-        else{
+          if(!payload.userAuth.isHidden){
+            user = payload.userAuth;
+            req.body.userAuth = user;
+            req.headers.authorization = token;
+            next();
+          }else{
+            res.status(403).json({
+              message: "Your account is blocked",
+              success: false,
+            });
+          }
+        
+        } else {
           return res.status(401).json({
-                message: "Authentication failed!",
-                success: false,
-              });
+            message: "Authentication failed!",
+            success: false,
+          });
         }
         //Get info of accesstoken
         // else

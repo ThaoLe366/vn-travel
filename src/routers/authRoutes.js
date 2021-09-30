@@ -23,7 +23,6 @@ const googleAuth = async (token) => {
   return ticket.getPayload();
 };
 
-
 // passport.use(
 //   new FacebookStrategy(
 //     {
@@ -106,26 +105,33 @@ router.post("/login/users", async (req, res) => {
       bcrypt.compare(enterPassword, passwordHash, function (err, result) {
         if (result == true) {
           if (req.query.userRole == String(snapshot.isUser)) {
-            const tokenGenerate = jwt.sign(
-              {
-                userAuth: {
-                  id: snapshot.id,
-                  email: snapshot.email,
-                  isUser: snapshot.isUser,
-                  picture:snapshot.image,
-                  name:snapshot.fullName
+            if (!snapshot.isHidden) {
+              const tokenGenerate = jwt.sign(
+                {
+                  userAuth: {
+                    id: snapshot.id,
+                    email: snapshot.email,
+                    isUser: snapshot.isUser,
+                    picture: snapshot.image,
+                    name: snapshot.fullName,
+                  },
                 },
-              },
-              process.env.SECRET_KEY,
-              {
-                expiresIn: "8h",
-              }
-            );
-            return res.status(200).json({
-              success: true,
-              message: "Login successfully",
-              token: tokenGenerate,
-            });
+                process.env.SECRET_KEY,
+                {
+                  expiresIn: "8h",
+                }
+              );
+              return res.status(200).json({
+                success: true,
+                message: "Login successfully",
+                token: tokenGenerate,
+              });
+            } else {
+              res.status(403).json({
+                message: "Your account is blocked",
+                success: false,
+              });
+            }
           } else {
             return res.status(500).json({
               message: "Role of user is not allowed",
@@ -172,37 +178,53 @@ router.post("/login/google", async (req, res, next) => {
     });
 
     if (!snapshot) {
-      let newUser = new User({
-        fullName: user.name,
-        email: user.email,
-        password: "",
-      });
-
-      newUser = await newUser.save();
-
-      if (!newUser) {
-        return res.status(500).json({
-          message: "Cannot create user",
-          success: false,
+      if (String(req.query.userRole) === "true") {
+        let newUser = new User({
+          fullName: user.name,
+          email: user.email,
+          password: "",
+          image: user.picture,
         });
+
+        newUser = await newUser.save();
+
+        if (!newUser) {
+          return res.status(500).json({
+            message: "Cannot create user",
+            success: false,
+          });
+        } else {
+          return res.status(200).json({
+            message: "Create user successfully",
+            success: true,
+            user: newUser,
+            token: token,
+          });
+        }
       } else {
-        return res.status(200).json({
-          message: "Create user successfully",
-          success: true,
-          user: newUser,
-          token: token,
+        res.status(401).json({
+          message: "Permission deny",
+          success: false,
         });
       }
     } else {
       if (req.query.userRole) {
         if (String(snapshot.isUser) == req.query.userRole) {
+          if (!snapshot.isHidden) {
+            return res.status(200).json({
+              message: "User login",
+              success: true,
+              user: snapshot,
+              token: req.headers.authorization,
+            });
+          } else {
+            res.status(403).json({
+              message: "Your account is blocked",
+              success: false,
+            });
+          }
+
           //TODO: Update user
-          return res.status(200).json({
-            message: "User login",
-            success: false,
-            user: snapshot,
-            token: req.headers.authorization,
-          });
         } else {
           return res.status(500).json({
             message: "Bad information",

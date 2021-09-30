@@ -91,8 +91,8 @@ router.put("/:userId/status", requireAuth, async (req, res, next) =>
         userUpdatedCondition,
         { $set: { isHidden: req.body.isHidden } },
         { new: true },
-        function (er,documents){
-            if(err){
+        function (err,documents){
+            if(!err){
               User.populate(documents,["favorite"], function(err){
                 return res.status(200).json({
                   success: true,
