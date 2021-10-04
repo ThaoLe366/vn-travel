@@ -34,7 +34,7 @@ const tagRouter = require("./src/routers/tagRoutes");
 const imageRouter = require("./src/routers/imageRoutes");
 const provinceRouter = require("./src/routers/provinceRoutes");
 const categoryRouter = require("./src/routers/categorieRoutes");
-
+const reportRouter = require("./src/routers/reportRoutes");
 const reviewRouter = require("./src/routers/reviewRoutes");
 
 //Config swagger
@@ -96,7 +96,7 @@ app.use(`${api}/images`, imageRouter);
 app.use(`${api}/provinces`, provinceRouter);
 app.use(`${api}/categories`, categoryRouter);
 app.use(`${api}/reviews`, reviewRouter);
-
+app.use(`${api}/reports`, reportRouter)
 //Get Swagger API
 app.use(
   "/api-docs",

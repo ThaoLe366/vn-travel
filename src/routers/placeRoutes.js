@@ -112,6 +112,7 @@ router.post("/", requireAuth, async (req, res, next) =>
       lattitude: req.body.lattitude,
       tags: req.body.tags,
       rate: req.body.rate,
+      rateVoting:req.body.rate,
       weight: req.body.weight,
       province: req.body.province,
       category: req.body.category,

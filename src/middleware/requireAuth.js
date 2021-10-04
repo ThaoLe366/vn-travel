@@ -46,7 +46,6 @@ const requireAuth = async (req, res, next) => {
     try {
       let user;
       jwt.verify(token, process.env.SECRET_KEY, function (err, payload) {
-        console.log(token);
         if (typeof payload != "undefined") {
           if(!payload.userAuth.isHidden){
             user = payload.userAuth;

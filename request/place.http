@@ -1,6 +1,6 @@
 
 # @name login
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
@@ -13,12 +13,12 @@ Content-Type: application/json
 ###
 
 ### Create new place
-PUT http://localhost:5000/app/api/v1/places/613b1da30ea0491390fa5bb0
+POST https://vntravel-api.herokuapp.com/app/api/v1/places
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-    "name": "Chùa một cột HN",
+    "name": "CGV Tân Qui 66",
     "description": "Phố cổ Hội An là một thành phố nổi tiếng của tỉnh Quảng Nam, một phố cổ giữ được gần như nguyên vẹn với hơn 1000 di tích kiến trúc từ phố xá, nhà cửa, hội quán, đình, chùa, miếu, nhà thờ tộc, giếng cổ… đến các món ăn truyền thống, tâm hồn của người dân nơi đây. Một lần du lịch Hội An sẽ làm say đắm lòng du khách bởi những nét đẹp trường tồn cùng thời gian, vô cùng mộc mạc, bình dị.",
     "address":"TL 7",
     "longtitude": 15.8801,
@@ -36,7 +36,7 @@ Authorization: token {{authToken}}
 
 }
 ### Add image to place
-PUT http://localhost:5000/app/api/v1/places/613add51a784f131b084e56e/images
+POST http://localhost:5000/app/api/v1/places/613add51a784f131b084e56e/images
 Content-Type: application/json
 
 {

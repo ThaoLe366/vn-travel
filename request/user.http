@@ -1,11 +1,11 @@
 ###Register
-POST http://localhost:5000/app/api/v1/auths/register
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/register
 Content-Type: application/json
 
 {
-     "email": "thaole301000@gmail.com",
+     "email": "tangycheng@gmail.com",
     "password" : "12345",
-    "fullName": "Nguyen TM Hoang"
+    "fullName": "Thong Chu Thanh"
 }
 
 ### Login by email password
@@ -20,7 +20,7 @@ Content-Type: application/json
 ### Add favorite places
 PUT http://localhost:5000/app/api/v1/users/favorite/611930190aab361378748f0b
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6WyI2MTFiNzdjN2EzYTM4NTQwOThmM2Y3ZjIiXSwiaXNVc2VyIjpmYWxzZSwiZW1haWwiOiJob2FuZ25ndXllbkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRlbDJJSFRkcElGd0QxZHlHLmZGT291bC9ZeWVKYXdXQXRTUFhlUVAvRUJ5Vm81dXJWM3plZSIsImNyZWF0ZWRBdCI6IjIwMjEtMDgtMTdUMDY6MjE6MTAuNzkyWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDgtMTdUMDY6MjE6MTAuNzkyWiIsImlkIjoiNjExYjU1NTZmZjEwMTMyMjYwZDllMjc5In0sImlhdCI6MTYyOTI1NzQ3MCwiZXhwIjoxNjI5MjYxMDcwfQ.fq3kkhirNJW6QjEIT7cpxar-0QFy7QODrVy4yTGEP90
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzMwNTk0ODksImV4cCI6MTYzMzA4ODI4OX0.PWcFqFkefzDyTWa6sl5QTlX80Cc-0E-plXl9rqff9DY
 
 ###Get user 
 GET https://vntravel-api.herokuapp.com/app/api/v1/users

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { formatTimeUTC } = require("../utils/Timezone");
 const { STATUS } = require("./enum");
-
+const Double = require("mongodb").Double;
 const placeSchema = mongoose.Schema({
   name: {
     type: String,
@@ -12,10 +12,12 @@ const placeSchema = mongoose.Schema({
     default: "",
   },
   longtitude: {
-    type: mongoose.Schema.Types.Decimal128,
+    type: Number,
+    default:0,
   },
   lattitude: {
-    type: mongoose.Schema.Types.Decimal128,
+    type: Number,
+    default:0
   },
   address: {
     type: String,
@@ -31,6 +33,7 @@ const placeSchema = mongoose.Schema({
     require: true,
     default: 0,
   },
+  rateVoting: { type: Number, require: true  },
   reviewCount: {
     type: Number,
     default: 0,
