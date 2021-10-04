@@ -10,9 +10,13 @@ const reviewSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  rate: { type: Number, require: true, default: 0 },
+  rate: {
+    type: Number,
+    require: true,
+    default: 0,
+  },
   likeCount: {
-    type: mongoose.Schema.Types.Decimal128,
+    type: Number,
     default: 0,
   },
   likedUser: [

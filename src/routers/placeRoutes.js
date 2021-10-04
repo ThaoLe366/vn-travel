@@ -5,6 +5,7 @@ const requireAuth = require("../middleware/requireAuth");
 const requireRole = require("../middleware/requireRole");
 const { formatTimeUTC } = require("../utils/Timezone");
 const { STATUS } = require("../models/enum");
+const updateRateVoting = require("../helpers/updateRateVoting");
 
 //@route GET v1/places/private
 //@desc Get all places (public vs private)
@@ -82,7 +83,11 @@ router.get("/:placeId", async (req, res) => {
       //Get object foreign key
       placeList = await Place.find({
         _id: filterById,
-      }).populate("province").populate('category').populate('tags').exec();
+      })
+        .populate("province")
+        .populate("category")
+        .populate("tags")
+        .exec();
     } else {
       placeList = await Place.find({ status: STATUS.PUBLIC, _id: filterById });
     }
@@ -112,7 +117,7 @@ router.post("/", requireAuth, async (req, res, next) =>
       lattitude: req.body.lattitude,
       tags: req.body.tags,
       rate: req.body.rate,
-      rateVoting:req.body.rate,
+      rateVoting: req.body.rate,
       weight: req.body.weight,
       province: req.body.province,
       category: req.body.category,
@@ -189,20 +194,24 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
           },
           updatedAt: formatTimeUTC(),
         },
-        { new: true },
-        function (err, documents) {
-          console.log(err)
-          if (!err) {
-            Place.populate(documents, ["category", "province","tags"], function (err) {
-              return res.status(200).json({
-                message: "Update successfully",
-                success: true,
-                place: documents,
-              });
-            });
-          }
-        }
+        { new: true }
       );
+      if (placeUpdate) {
+        const resultUpdateVoting = await updateRateVoting(req.params.placeId);
+        if (resultUpdateVoting) {
+          Place.populate(
+            resultUpdateVoting,
+            ["category", "province", "tags"],
+            function (err) {
+              return res.status(200).json({
+                message: "Update successful",
+                success: true,
+                place: resultUpdateVoting,
+              });
+            }
+          );
+        }
+      }
     } catch (error) {
       console.log(error.message);
       return res.status(500).json({

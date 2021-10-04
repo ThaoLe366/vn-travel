@@ -1,19 +1,32 @@
-### Create new contribute
-
-POST http://localhost:5000/app/api/v1/contributes
+# @name login
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6W10sImlzVXNlciI6dHJ1ZSwiZW1haWwiOiJob2FuZ25ndXllbjEyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFZJRlBIZWt4cW4ucWdkUFVXVGlURmVtOE5DR0lTYkloWlRlY29aRGNlVFhlbU5hbVRXOFJpIiwiY3JlYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMS0wOC0yMFQyMDozOTo0MS4wMDBaIiwiaWQiOiI2MTFmYjA5ZGI2MmU2NTNjNGM4NThhYjgifSwiaWF0IjoxNjI5NTMwNjkwLCJleHAiOjE2Mjk1NTk0OTB9.GHYwFbCLGSktjHSjfuTXPfcbkcHs4pyH4HXcIxnQQwE
 
 {
-    "content": "Something wrong here. Can you see ?",
-    "place": "6120a9dd62a6923adc1cdb53"
+    "email": "thaole301000@gmail.com",
+    "password" : "12345"
+}
+
+###
+@authToken = {{login.response.body.token}}
+###
+
+### Create new contribute
+
+POST https://vntravel-api.herokuapp.com/app/api/v1/contributes
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "content": "Tôi nghĩ các bạn nên thay đổi hình ảnh cho phù hợp hơn.",
+    "place": "6142ada97a66e700160ca5a9"
 }
 
 ### Get all contribute
 
 GET http://localhost:5000/app/api/v1/contributes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJmYXZvcml0ZSI6WyI2MTFiNzdjN2EzYTM4NTQwOThmM2Y3ZjIiLCI2MTE5MzAxOTBhYWIzNjEzNzg3NDhmMGIiXSwiaXNVc2VyIjpmYWxzZSwiZW1haWwiOiJob2FuZ25ndXllbkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRlbDJJSFRkcElGd0QxZHlHLmZGT291bC9ZeWVKYXdXQXRTUFhlUVAvRUJ5Vm81dXJWM3plZSIsImNyZWF0ZWRBdCI6IjIwMjEtMDgtMTdUMDY6MjE6MTAuNzkyWiIsInVwZGF0ZWRBdCI6IjIwMjEtMDgtMTdUMDY6MjE6MTAuNzkyWiIsImlkIjoiNjExYjU1NTZmZjEwMTMyMjYwZDllMjc5In0sImlhdCI6MTYyOTI2ODE0NCwiZXhwIjoxNjI5MjcxNzQ0fQ.74EFu5h73a1vPgB_wq_jh9ql1rw5L4v3-Ko7SFVOyjI
+Authorization: token {{authToken}}
 
 
 ### Get  contribute by contribute Id

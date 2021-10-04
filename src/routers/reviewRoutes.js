@@ -5,8 +5,9 @@ const express = require("express");
 const router = express.Router();
 const requireAuth = require("../middleware/requireAuth");
 const requireRole = require("../middleware/requireRole");
-const { formatTimeUTC_ } = require("../utils/Timezone");
 const Place = require("../models/Place");
+const { formatTimeUTC, formatTimeUTC_ } = require("../utils/Timezone");
+const updateRateVoting = require("../helpers/updateRateVoting");
 
 //@route POST v1/reviews
 //@desc create review
@@ -34,45 +35,19 @@ router.post("/", requireAuth, async (req, res, next) => {
 
     newReview = await newReview.save();
     if (newReview) {
-      //Find rate and weight base.
-      const placeUpdateRating = await Place.findById(place);
-      //ReCalculate
-      const reviewsOfPlace = await Review.find({
-        place: place,
-        isHidden: false,
-      });
-      let sum = 0,
-        count = reviewsOfPlace.length;  
-      reviewsOfPlace.forEach((rv) => {
-        sum += rv.rate;
-      });
-
-      let updatedRate =
-        (sum + placeUpdateRating.rate * placeUpdateRating.weight) /
-        (count + placeUpdateRating.weight);
-      Place.findOneAndUpdate(
-        { _id: place },
-        {
-          rateVoting: updatedRate,
-        },
-        { new: true },
-        function (error, documents) {
-          console.log(64, documents);
-          console.log(error);
-          if (!error) {
-            return res.json({
-              success: true,
-              message: "Create review successfully",
-              review: newReview,
-            });
-          }
-        }
-      );
-    } else
-      return res.status(500).json({
-        success: false,
-        message: "Create review successfully",
-      });
+      const resultUpdateVoting = await updateRateVoting(place);
+      if (resultUpdateVoting) {
+        return res.json({
+          success: true,
+          message: "Create review successfully",
+          review: newReview,
+        });
+      } else
+        return res.status(500).json({
+          success: false,
+          message: "Create review successfully",
+        });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -106,7 +81,7 @@ router.get("/:placeId", requireAuth, async (req, res, next) => {
     }
     return res.status(500).json({
       success: false,
-      message: "Get reviews unsucceesfully",
+      message: "Get reviews unsuccessfully",
     });
   } catch (error) {
     console.log(error.message);
@@ -149,7 +124,7 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
         review.likedUser.splice(index, 1);
       }
       review.likeCount--;
-      review.updateddAt = formatTimeUTC();
+      review.updatedAt = formatTimeUTC();
       const result = await review.save();
       if (result)
         return res.json({
@@ -165,7 +140,7 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
       //user liked review
       review.likedUser.push(user.id);
       review.likeCount++;
-      review.updateddAt = formatTimeUTC;
+      review.updatedAt = formatTimeUTC();
       const result = await review.save();
       if (result)
         return res.json({
@@ -192,47 +167,40 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
 //@access private
 //@role user
 
-router.put('/delete/:reviewId', requireAuth, async (req, res, next) => {
-    try {
+router.put("/delete/:reviewId", requireAuth, async (req, res, next) => {
+  try {
+    let reviewer = req.body.userAuth;
+    if (!mongoose.Types.ObjectId.isValid(req.params.reviewId))
+      return res.status(400).json({
+        success: false,
+        message: "Invalid reviewId",
+      });
 
-        let reviewer = req.body.userAuth;
-        if (!mongoose.Types.ObjectId.isValid(req.params.reviewId))
-            return res.status(400).json({
-                success: false,
-                message: "Invalid reviewId",
-            });
+    let reviewUpdate = {
+      isHidden: req.body.isHidden,
+      updatedAt: formatTimeUTC(),
+    };
 
-        let reviewUpdate = {
-            isHidden: true,
-            updatedAt: formatTimeUTC(),
-        };
+    reviewUpdate = await Review.findOneAndUpdate(
+      { _id: req.params.reviewId },
+      reviewUpdate,
+      { new: true }
+    );
+    console.log(reviewUpdate);
 
-        reviewUpdate = await Review.findOneAndUpdate(
-            { _id: req.params.reviewId, user: reviewer.id },
-            reviewUpdate,
-            { new: true }
-        );
-
-        if (reviewUpdate) {
-            res.json({
-                success: true,
-                message: "Delete review successfully",
-                plan: reviewUpdate,
-            });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: "Delete review unsuccessfully",
-            });
-        }
-
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).json({
-            success: false,
-            message: "Internal error server",
-        });
-   
+    if (reviewUpdate) {
+      res.status(200).json({
+        success: true,
+        message: "Delete review successfully",
+        review: reviewUpdate,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal error server",
+    });
   }
 });
 
