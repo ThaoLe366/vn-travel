@@ -69,11 +69,26 @@ router.post("/register", async (req, res) => {
       });
     }
     user = await user.save();
-
+    const tokenGenerate = jwt.sign(
+      {
+        userAuth: {
+          id: user.id,
+          email: user.email,
+          isUser: user.isUser,
+          picture: user.image,
+          name: user.fullName,
+        },
+      },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "8h",
+      }
+    );
     return res.status(200).json({
       message: "User created successfully",
       success: true,
       user: user,
+      token:tokenGenerate
     });
   } catch (error) {
     res.status(500).json({

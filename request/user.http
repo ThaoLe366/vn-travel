@@ -1,11 +1,11 @@
 ###Register
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/register
+POST http://localhost:5000/app/api/v1/auths/register
 Content-Type: application/json
 
 {
-     "email": "tangycheng@gmail.com",
+     "email": "nhungle@gmail.com",
     "password" : "12345",
-    "fullName": "Thong Chu Thanh"
+    "fullName": "Le Thi Ngoc Nhung"
 }
 
 ### Login by email password
