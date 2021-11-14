@@ -24,6 +24,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+//@route GET v1/provinces/public
+//@desc Get all  provinces having isHidden = false
+//@access public
+//@role any
+router.get("/public", async (req, res) => {
+  try {
+    const provinceList = await Province.find({ isHidden: false });
+    return res.status(200).json({
+      message: "Get all province successfully",
+      success: true,
+      provinces: provinceList,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+});
+
 //@route GET v1/provinces/:provinceId
 //@desc Get province by filter(id)
 //@access public
@@ -40,6 +60,7 @@ router.post("/", requireAuth, async (req, res, next) =>
         name: req.body.name,
         color: req.body.color,
         isHidden: req.body.isHidden,
+        image: req.body.image,
       });
 
       province = await province.save();
@@ -70,6 +91,8 @@ router.put("/:provinceId", requireAuth, async (req, res, next) =>
           name: req.body.name,
           color: req.body.color,
           isHidden: req.body.isHidden,
+          placeCount: req.body.placeCount,
+          image: req.body.image,
           updatedAt: formatTimeUTC(),
         },
         { new: true },

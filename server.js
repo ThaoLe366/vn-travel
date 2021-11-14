@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use("/public/images", express.static("public/images"));
 //CORS
-app.use(cors())
+app.use(cors());
 //Base url: no slash at the end
 const api = process.env.API_URL;
 
@@ -36,6 +36,7 @@ const provinceRouter = require("./src/routers/provinceRoutes");
 const categoryRouter = require("./src/routers/categorieRoutes");
 const reportRouter = require("./src/routers/reportRoutes");
 const reviewRouter = require("./src/routers/reviewRoutes");
+const explorerRouter = require("./src/routers/explorerRoutes");
 
 //Config swagger
 const options = {
@@ -96,7 +97,9 @@ app.use(`${api}/images`, imageRouter);
 app.use(`${api}/provinces`, provinceRouter);
 app.use(`${api}/categories`, categoryRouter);
 app.use(`${api}/reviews`, reviewRouter);
-app.use(`${api}/reports`, reportRouter)
+app.use(`${api}/reports`, reportRouter);
+app.use(`${api}/explorers`, explorerRouter);
+
 //Get Swagger API
 app.use(
   "/api-docs",

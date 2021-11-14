@@ -34,14 +34,22 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: formatTimeUTC,
   },
-  image:{
-    type:String,
-    default:"https://hinhnen123.com/wp-content/uploads/2021/06/avt-cute-9.jpg"
+  image: {
+    type: String,
+    default: "https://hinhnen123.com/wp-content/uploads/2021/06/avt-cute-9.jpg",
   },
-  isHidden:{
-    type:Boolean,
-    default:false
-  }
+  isHidden: {
+    type: Boolean,
+    default: false,
+  },
+
+  //!ADD NEW FIELDS
+  recentSearch: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "places",
+    },
+  ],
 });
 
 userSchema.method("toJSON", function () {

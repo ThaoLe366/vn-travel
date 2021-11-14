@@ -25,6 +25,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+//@desc Get all public categories
+//@access public
+//@role any
+router.get("/public", async (req, res) => {
+  try {
+    const categoryList = await Category.find({ isHidden: false });
+    return res.status(200).json({
+      message: "Get all category successfully",
+      success: true,
+      categories: categoryList,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+});
+
 //@route POST v1/categorys
 //@desc Create new category
 //@access private
@@ -36,7 +55,6 @@ router.post("/", requireAuth, async (req, res, next) =>
         name: req.body.name,
         color: req.body.color,
         isHidden: req.body.isHidden,
-
       });
 
       category = await category.save();
@@ -67,11 +85,10 @@ router.put("/:categoryId", requireAuth, async (req, res, next) =>
           name: req.body.name,
           color: req.body.color,
           isHidden: req.body.isHidden,
-          updatedAt: formatTimeUTC()
+          updatedAt: formatTimeUTC(),
         },
         { new: true },
         function (err, documents) {
-
           return res.status(200).json({
             message: "Update successfully",
             success: true,
@@ -79,7 +96,6 @@ router.put("/:categoryId", requireAuth, async (req, res, next) =>
           });
         }
       );
-
     } catch (error) {
       return res.status(500).json({
         message: error.message,
@@ -99,19 +115,17 @@ router.delete("/:categoryId", requireAuth, async (req, res, next) =>
         { _id: req.params.categoryId },
         {
           isHidden: true,
-          updatedAt: formatTimeUTC()
+          updatedAt: formatTimeUTC(),
         },
         { new: true },
         function (err, documents) {
-
           return res.status(200).json({
             message: "Delete province successfully",
             success: true,
-            category: documents
+            category: documents,
           });
         }
       );
-
     } catch (error) {
       return res.status(500).json({
         message: error.message,

@@ -13,11 +13,11 @@ const placeSchema = mongoose.Schema({
   },
   longtitude: {
     type: Number,
-    default:0,
+    default: 0,
   },
   lattitude: {
     type: Number,
-    default:0
+    default: 0,
   },
   address: {
     type: String,
@@ -33,7 +33,7 @@ const placeSchema = mongoose.Schema({
     require: true,
     default: 0,
   },
-  rateVoting: { type: Number, require: true  },
+  rateVoting: { type: Number, require: true },
   reviewCount: {
     type: Number,
     default: 0,
@@ -75,6 +75,33 @@ const placeSchema = mongoose.Schema({
   updatedAt: {
     type: Date,
     default: formatTimeUTC,
+  },
+  //!ADD NEW FIELDS
+  viewCount: {
+    type: Number,
+    default: 0,
+  },
+  reviewStatus: {
+    excellent: {
+      type: Number,
+      default: 0,
+    },
+    good: {
+      type: Number,
+      default: 0,
+    },
+    average: {
+      type: Number,
+      default: 0,
+    },
+    poor: {
+      type: Number,
+      default: 0,
+    },
+    terrible: {
+      type: Number,
+      default: 0,
+    },
   },
 });
 

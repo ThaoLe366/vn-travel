@@ -6,6 +6,7 @@ const requireRole = require("../middleware/requireRole");
 const { formatTimeUTC } = require("../utils/Timezone");
 const { STATUS } = require("../models/enum");
 const updateRateVoting = require("../helpers/updateRateVoting");
+const { Province } = require("../models/Province");
 
 //@route GET v1/places/private
 //@desc Get all places (public vs private)
@@ -138,6 +139,19 @@ router.post("/", requireAuth, async (req, res, next) =>
         });
       }
 
+      //Update province placeCount;
+      let province = await Province.findById(req.body.province);
+
+      let updatedProvince = {
+        placeCount: province.placeCount + 1,
+        updatedAt: formatTimeUTC(),
+      };
+      updatedProvince = await Province.findOneAndUpdate(
+        { _id: province._id },
+        updatedProvince,
+        { new: true }
+      );
+
       Place.populate(place, ["category", "province"], function (err) {
         return res.status(200).json({
           success: true,
@@ -192,6 +206,8 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
             start: start,
             end: end,
           },
+          reviewStatus: req.body.reviewStatus,
+          viewCount: req.body.viewCount,
           updatedAt: formatTimeUTC(),
         },
         { new: true }
@@ -289,4 +305,17 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
   })
 );
 
+//TODO: Get popular place ( most added to user's plan )
+
+//TODO: Get recent view of user
+
+//TODO: Get the top 10 hot search place
+
+//TODO: Get place by category id
+
+//TODO: Get place by tags
+
+//TODO: Get place of a province by province ID
+
+//TODO: Get nearby places by place ID
 module.exports = router;

@@ -1,0 +1,45 @@
+# @name login
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
+Content-Type: application/json
+
+{
+    "email": "thaole301000@gmail.com",
+    "password" : "12345"
+}
+
+###
+@authToken = {{login.response.body.token}}
+###
+
+### Create new explorer
+
+POST http://localhost:5000/app/api/v1/explorers
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "title": "Thành phố nhộn nhịp",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.",
+    "banner": "https://huesmiletravel.com.vn/wp-content/uploads/2019/11/Kham-pha-thien-duong-du-lich-nha-trang.jpg" 
+}
+
+### Get all explorers
+
+GET http://localhost:5000/app/api/v1/explorers/private
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+### Update explorer
+
+PUT http://localhost:5000/app/api/v1/explorers/6190d2f86b93131964e73d34
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "title": "Thành phố nhộn nhịp",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.",
+    "banner": "https://huesmiletravel.com.vn/wp-content/uploads/2019/11/Kham-pha-thien-duong-du-lich-nha-trang.jpg",
+    "tags":[],
+    "isHidden": false 
+   
+}
