@@ -1,14 +1,14 @@
 # @name login
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
-    "email": "nguyenhoang13166@gmail.com",
+    "email": "thaole301000@gmail.com",
     "password" : "12345"
 }
 
 ###
-@authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxMzFmZGY2MTk4ZGFjMzBlY2JmYTZjZCIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzEzNzQyNjQsImV4cCI6MTYzMTQwMzA2NH0.rCZNxIJLR53DJlM15gZV13QD17g2A2qsy9qUtWGKw_M"
+@authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzY5MDExNjQsImV4cCI6MTYzNjkyOTk2NH0.5h6jEn5GE4fOGEyJsBcaDLXAEHBWH06SF_MzvimXoQ0"
 ###
 
 ### Province
@@ -42,3 +42,9 @@ Authorization: token {{authToken}}
 DELETE  http://localhost:5000/app/api/v1/provinces/611e2ace95dcd508f4706781
 Content-Type: application/json
 Authorization: token {{authToken}}
+
+### 
+DELETE  http://localhost:5000/app/api/v1/provinces/delete/all
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzY5MDExNjQsImV4cCI6MTYzNjkyOTk2NH0.5h6jEn5GE4fOGEyJsBcaDLXAEHBWH06SF_MzvimXoQ0
+

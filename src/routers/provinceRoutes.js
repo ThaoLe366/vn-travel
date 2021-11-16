@@ -144,4 +144,24 @@ router.delete("/:provinceId", requireAuth, async (req, res, next) =>
   })
 );
 
+//@route DELETE v1/provinces
+//@desc Delete provinces
+//@access private
+//@role
+router.delete("/delete/all", requireAuth, async (req, res, next) => {
+  try {
+    let provinceUpdate = await Province.deleteMany({ isHidden: false });
+    res.json({
+      success: true,
+      message: "Detele successfully.",
+      count: provinceUpdate,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+      success: false,
+    });
+  }
+});
+
 module.exports = router;
