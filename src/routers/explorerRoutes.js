@@ -17,13 +17,16 @@ router.post("/", requireAuth, async (req, res, next) =>
         description: req.body.description,
         banner: req.body.banner,
         tags: req.body.tags,
+        isHidden: req.body.isHidden,
       });
 
       explorer = await explorer.save();
-      res.json({
-        success: true,
-        message: "Explorer created successfully",
-        explorer,
+      Explorer.populate(explorer, ["tags"], function (err) {
+        return res.status(200).json({
+          success: true,
+          message: "Explorer created successfully",
+          explorer,
+        });
       });
     } catch (error) {
       console.log(error);
@@ -93,7 +96,7 @@ router.put("/:explorerId", requireAuth, async (req, res, next) =>
   requireRole("admin", req, res, next, async (req, res, next) => {
     const { tags, isHidden } = req.body;
     try {
-      let explorers = {
+      let explorer = {
         title: req.body.title,
         description: req.body.description,
         banner: req.body.banner,
@@ -101,18 +104,19 @@ router.put("/:explorerId", requireAuth, async (req, res, next) =>
         isHidden,
         updatedAt: formatTimeUTC(),
       };
-      explorers = await Explorer.findOneAndUpdate(
+      explorer = await Explorer.findOneAndUpdate(
         {
           _id: req.params.explorerId,
         },
-        explorers,
+        explorer,
         { new: true }
       );
-
-      return res.status(200).json({
-        success: true,
-        message: "Updated explorers successfully",
-        places: explorers,
+      Explorer.populate(explorer, ["tags"], function (err) {
+        return res.status(200).json({
+          success: true,
+          message: "Updated explorers successfully",
+          places: explorer,
+        });
       });
     } catch (err) {
       console.log(err);

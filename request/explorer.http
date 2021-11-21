@@ -1,3 +1,4 @@
+
 # @name login
 POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
@@ -18,9 +19,10 @@ Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-    "title": "Thành phố nhộn nhịp",
+    "title": "Tet",
     "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.",
-    "banner": "https://huesmiletravel.com.vn/wp-content/uploads/2019/11/Kham-pha-thien-duong-du-lich-nha-trang.jpg" 
+    "banner": "https://intphcm.com/data/upload/banner-tet.jpg" ,
+    "tags":["614c017e27c6e100160c06f9"]
 }
 
 ### Get all explorers
@@ -39,7 +41,7 @@ Authorization: token {{authToken}}
     "title": "Thành phố nhộn nhịp",
     "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.",
     "banner": "https://huesmiletravel.com.vn/wp-content/uploads/2019/11/Kham-pha-thien-duong-du-lich-nha-trang.jpg",
-    "tags":[],
+    "tags":["614c017e27c6e100160c06f9"],
     "isHidden": false 
    
 }

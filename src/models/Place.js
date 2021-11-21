@@ -81,6 +81,10 @@ const placeSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  popular: {
+    type: Boolean,
+    default: false,
+  },
   reviewStatus: {
     excellent: {
       type: Number,

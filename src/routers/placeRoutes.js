@@ -129,6 +129,7 @@ router.post("/", requireAuth, async (req, res, next) =>
         start: start,
         end: end,
       },
+      popular: res.body.popular,
     });
     try {
       place = await place.save();
@@ -209,6 +210,7 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
           reviewStatus: req.body.reviewStatus,
           viewCount: req.body.viewCount,
           updatedAt: formatTimeUTC(),
+          popular: req.body.popular,
         },
         { new: true }
       );
@@ -274,7 +276,6 @@ router.delete("/:placesId", requireAuth, async (req, res, next) =>
 router.put("/:placeId/images", requireAuth, async (req, res, next) =>
   requireRole("admin", req, res, next, async (req, res, next) => {
     try {
-      console.log(req.body.images);
       const placeUpdate = await Place.findOneAndUpdate(
         { _id: req.body.id },
         {
