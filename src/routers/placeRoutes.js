@@ -306,17 +306,155 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
   })
 );
 
-//TODO: Get popular place ( most added to user's plan )
+//TODO: Get popular place ( pick by admin )
 
 //TODO: Get recent view of user
 
 //TODO: Get the top 10 hot search place
+router.get("/top-search/:number", async (req, res) => {
+  try {
+    let places = await Place.find({ viewCount: { $gt: 10 } })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
 
+    places = places
+      .sort((a, b) => b.viewCount - a.viewCount)
+      .slice(0, req.params.number);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
 //TODO: Get place by category id
+//@route PUT v1/places/category/:categoryId
+//@desc Update images description in this place
+//@access public
+//@role any
+router.get("/category/:categoryId", async (req, res) => {
+  try {
+    let places = await Place.find({
+      category: req.params.categoryId,
+      status: STATUS.PUBLIC,
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+    //Sort with rating
+    places = places.sort((a, b) => b.rateVoting - a.rateVoting);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
 
 //TODO: Get place by tags
 
-//TODO: Get place of a province by province ID
+router.put("/find/tags", async (req, res, next) => {
+  try {
+    let tagsRequest = req.body.tags;
+    console.log("Thao ", tagsRequest);
 
+    let places = await Place.find({
+      tags: {
+        $elemMatch: { $in: tagsRequest },
+      },
+      status: STATUS.PUBLIC,
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+
+    //Sort with rating
+    places = places.sort((a, b) => b.rateVoting - a.rateVoting);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
+//TODO: Get place of a province by province ID
+router.get("/province/:provinceId", async (req, res) => {
+  try {
+    let places = await Place.find({
+      province: req.params.provinceId,
+      status: STATUS.PUBLIC,
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+    //Sort with rating
+    places = places.sort((a, b) => b.rateVoting - a.rateVoting);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
 //TODO: Get nearby places by place ID
+
+const handleSearch = (keyWord, items) => {
+  if (keyWord === "") {
+    //TODO: handel search for capital word
+    return items;
+  } else
+    return [
+      ...items.filter((x) =>
+        x.name
+          .toLowerCase()
+          .normalize("NFC")
+          .replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, "")
+          .includes(
+            keyWord
+              .toLowerCase()
+              .normalize("NFC")
+              .replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, "")
+          )
+      ),
+    ];
+};
+//@route POST v1/places/suggestion/:text
+//@desc Get places contain text in name
+//@access public
+//@role any
+router.post("/suggestion", async (req, res) => {
+  try {
+    let places = await Place.find({
+      status: STATUS.PUBLIC,
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+    //Sort with rating
+    console.log(req.body.text);
+    places = await handleSearch(req.body.text, places);
+    places = places.sort((a, b) => b.rateVoting - a.rateVoting);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+
 module.exports = router;

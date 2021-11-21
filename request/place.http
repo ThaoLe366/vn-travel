@@ -63,3 +63,28 @@ Authorization: token {{authToken}}
     "images":["https://cdn1.nhatrangtoday.vn/images/photos/kinh-nghiem-dat-ve-xe-nha-trang-da-lat-1.jpg","https://www.vietnambooking.com/wp-content/uploads/2020/12/kinh-nghiem-di-da-lat-thang-12-1.jpg"
     ]
 }
+###FIND PLACES CONTAIN TAG ID
+PUT http://localhost:5000/app/api/v1/places/find/tags
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "tags":["614c287428cff4001670150c", "614c018a27c6e100160c06fc"]
+}
+
+#### GET PLACE OF ONE CATEGORY
+GET http://localhost:5000/app/api/v1/places/category/612f41c7e410f520706e6428
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+#### GET PLACE OF ONE province
+GET http://localhost:5000/app/api/v1/places/province/612f41c7e410f520706e6428
+Content-Type: application/json
+Authorization: token {{authToken}}
+###
+POST http://localhost:5000/app/api/v1/places/suggestion
+Content-Type: application/json
+
+{
+    "text": "sư p"
+}

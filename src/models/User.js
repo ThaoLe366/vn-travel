@@ -46,8 +46,14 @@ const userSchema = mongoose.Schema({
   //!ADD NEW FIELDS
   recentSearch: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "places",
+      place: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "places",
+      },
+      time: {
+        type: Date,
+        default: formatTimeUTC,
+      },
     },
   ],
 });

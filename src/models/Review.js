@@ -21,9 +21,11 @@ const reviewSchema = mongoose.Schema({
   },
   likedUser: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      default: [],
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        default: [],
+      },
     },
   ],
   createAt: {
