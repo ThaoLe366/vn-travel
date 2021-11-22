@@ -51,7 +51,7 @@ router.get("/private", requireAuth, async (req, res, next) =>
       return res.status(200).json({
         success: true,
         message: "Get explorers successfully",
-        places: explorers,
+        explorers: explorers,
       });
     } catch (err) {
       console.log(err);
@@ -77,7 +77,7 @@ router.get("/", async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Get explorers successfully",
-      places: explorers,
+      explorers: explorers,
     });
   } catch (err) {
     console.log(err);
@@ -115,7 +115,7 @@ router.put("/:explorerId", requireAuth, async (req, res, next) =>
         return res.status(200).json({
           success: true,
           message: "Updated explorers successfully",
-          places: explorer,
+          explorer: explorer,
         });
       });
     } catch (err) {

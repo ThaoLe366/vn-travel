@@ -88,7 +88,7 @@ router.post("/register", async (req, res) => {
       message: "User created successfully",
       success: true,
       user: user,
-      token:tokenGenerate
+      token: tokenGenerate,
     });
   } catch (error) {
     res.status(500).json({
@@ -107,7 +107,6 @@ router.post("/login/users", async (req, res) => {
         email: req.body.email,
       });
       if (!snapshot) {
-        console.log(snapshot);
         return res.status(401).json({
           success: false,
           message: "Account not exist",
@@ -127,7 +126,7 @@ router.post("/login/users", async (req, res) => {
                     id: snapshot.id,
                     email: snapshot.email,
                     isUser: snapshot.isUser,
-                    picture: snapshot.image,
+                    image: snapshot.image,
                     name: snapshot.fullName,
                   },
                 },
@@ -140,6 +139,7 @@ router.post("/login/users", async (req, res) => {
                 success: true,
                 message: "Login successfully",
                 token: tokenGenerate,
+                user: snapshot,
               });
             } else {
               res.status(403).json({
@@ -148,7 +148,7 @@ router.post("/login/users", async (req, res) => {
               });
             }
           } else {
-            return res.status(500).json({
+            return res.status(401).json({
               message: "Role of user is not allowed",
               success: false,
             });
