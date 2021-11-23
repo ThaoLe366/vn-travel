@@ -59,7 +59,7 @@ router.get("/private", async (req, res) => {
         message: "Internal server error",
       });
     }
-  })
+  }
 );
 
 //@route GET v1/explorers
