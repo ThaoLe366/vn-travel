@@ -27,9 +27,9 @@ Authorization: token {{authToken}}
 
 ### Get all explorers
 
-GET http://localhost:5000/app/api/v1/explorers/private
+GET https://vntravel-api.herokuapp.com/app/api/v1/explorers/private
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsImltYWdlIjoiaHR0cHM6Ly9oaW5obmVuMTIzLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAyMS8wNi9hdnQtY3V0ZS05LmpwZyIsIm5hbWUiOiJOZ3V5ZW4gVE0gSG9hbmcifSwiaWF0IjoxNjM3NjU3ODU5LCJleHAiOjE2Mzc2ODY2NTl9.K7z5oQ0M4F7tOU9x0FheQa9qMqIpVxcpdViRmCnWf48
 
 ### Update explorer
 

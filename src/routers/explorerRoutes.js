@@ -42,8 +42,7 @@ router.post("/", requireAuth, async (req, res, next) =>
 //@desc Get all explorer (public vs private)
 //@access public
 //@role admin
-router.get("/private", requireAuth, async (req, res, next) =>
-  requireRole("admin", req, res, next, async (req, res, next) => {
+router.get("/private", async (req, res) => {
     try {
       let explorers = [];
       explorers = await Explorer.find().populate("tags").exec();
