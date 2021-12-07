@@ -9,28 +9,30 @@ Content-Type: application/json
 }
 
 ### Login by email password
-POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false       
+# @name login
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=true       
 Content-Type: application/json
 
 {
-    "email": "thaole301000@gmail.com",
-    "password" : "12345"
+   "email": "nhungle@gmail.com",
+   "password" : "12345"
 }
 
+###
+@authToken = {{login.response.body.token}}
 ### Add favorite places
 PUT http://localhost:5000/app/api/v1/users/favorite/611930190aab361378748f0b
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzMwNTk0ODksImV4cCI6MTYzMzA4ODI4OX0.PWcFqFkefzDyTWa6sl5QTlX80Cc-0E-plXl9rqff9DY
+Authorization: token {{authToken}}
 
 ###Get user 
-GET https://vntravel-api.herokuapp.com/app/api/v1/users
+GET http://localhost:5000/app/api/v1/users
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxMzFmZGY2MTk4ZGFjMzBlY2JmYTZjZCIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzI4ODYzMjksImV4cCI6MTYzMjkxNTEyOX0.sBE_yvSxjRrsr7Tdbezg2QJNghw0MRI9FkmPATe32QU
-
+Authorization: token {{authToken}}
 ###
 PUT http://localhost:5000/app/api/v1/users/6131fdf6198dac30ecbfa6cd/status  
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxMzFmZGY2MTk4ZGFjMzBlY2JmYTZjZCIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2MzI5MjM5NDEsImV4cCI6MTYzMjk1Mjc0MX0._ycuMPdf9aCkKSiD_ZAQcep3DF5-xLHP3XuLxfcBJFA
+Authorization: token {{authToken}}
 
 {
     "id":"6131fdf6198dac30ecbfa6cd",
@@ -40,9 +42,37 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZ
 ###
 GET http://localhost:5000/app/api/v1/auths/verify
 Content-Type: application/json
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxOGRjY2YwM2U2NTFhMGUwMGZiMTVjYSIsImVtYWlsIjoibmh1bmdsZUBnbWFpbC5jb20iLCJpc1VzZXIiOnRydWUsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6IkxlIFRoaSBOZ29jIE5odW5nIn0sImlhdCI6MTYzNzU3MTc1MywiZXhwIjoxNjM3NjAwNTUzfQ.QVPYdiWF3taQvZVz_ULsXdEpiUQbIDOWfFgE_4d5-GA
+Authorization:  token {{authToken}}
 
 ### Update recent search
-PUT http://localhost:5000/app/api/v1/users/recentSearch/613f4f867963b61e40efe78a
+PUT http://localhost:5000/app/api/v1/users/recentSearch/613b1da30ea0491390fa5bb0
 Content-Type: application/json
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyQXV0aCI6eyJpZCI6IjYxNTU2YmQ0NjUyZDUyMjFmNDI3ZjkyZSIsImVtYWlsIjoidGhhb2xlMzAxMDAwQGdtYWlsLmNvbSIsImlzVXNlciI6ZmFsc2UsInBpY3R1cmUiOiJodHRwczovL2hpbmhuZW4xMjMuY29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDIxLzA2L2F2dC1jdXRlLTkuanBnIiwibmFtZSI6Ik5ndXllbiBUTSBIb2FuZyJ9LCJpYXQiOjE2Mzc0MDE5NDIsImV4cCI6MTYzNzQzMDc0Mn0.DrxwZ0i2x7wRbiS8JF89y2LFRo1SrhRJr5geTlY4e9E
+Authorization: token {{authToken}}
+### Get recent search
+GET http://localhost:5000/app/api/v1/users/recentSearch
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+### Add favorites
+PUT http://localhost:5000/app/api/v1/users/favorite/613f4f867963b61e40efe78a
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+### Delete favorites
+DELETE http://localhost:5000/app/api/v1/users/favorite/613f4f867963b61e40efe78a
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+###Update Profile
+POST   http://localhost:5000/app/api/v1/users/profiles
+Content-Type: application/json
+Authorization: token {{authToken}}
+
+{
+    "image":"https://unsplash.com/photos/O3ymvT7Wf9U",
+    "fullName":"Nhung Le"
+}
+### Get favorites 
+GET http://localhost:5000/app/api/v1/users/favorite
+Content-Type: application/json
+Authorization: token {{authToken}}

@@ -21,9 +21,15 @@ const tagSchema = mongoose.Schema({
   },
 });
 
-tagSchema.method("toJSON", function () {
-  const { __v, ...object } = this.toObject();
-  const { _id: id, ...result } = object;
-  return { ...result, id };
+// tagSchema.method("toJSON", function () {
+//   const { __v, ...object } = this.toObject();
+//   const { _id: id, ...result } = object;
+//   return { ...result, id };
+// });
+tagSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+  },
 });
+
 exports.Tag = mongoose.model("tags", tagSchema);

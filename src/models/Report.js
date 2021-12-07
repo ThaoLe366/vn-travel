@@ -32,10 +32,15 @@ const reportSchema = mongoose.Schema({
     }
 })
 
-reportSchema.method("toJSON", function () {
-    const { __v, ...object } = this.toObject();
-    const { _id: id, ...result } = object;
-    return { ...result, id };
-});
+// reportSchema.method("toJSON", function () {
+//     const { __v, ...object } = this.toObject();
+//     const { _id: id, ...result } = object;
+//     return { ...result, id };
+// });
+reportSchema.set("toJSON", {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+    },
+  });
 module.exports = mongoose.model('reports', reportSchema)
 

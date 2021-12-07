@@ -46,10 +46,14 @@ const sectionSchema = mongoose.Schema({
     },
 });
 
-sectionSchema.method("toJSON", function () {
-    const { __v, ...object } = this.toObject();
-    const { _id: id, ...result } = object;
-    return { ...result, id };
-});
-
+// sectionSchema.method("toJSON", function () {
+//     const { __v, ...object } = this.toObject();
+//     const { _id: id, ...result } = object;
+//     return { ...result, id };
+// });
+sectionSchema.set("toJSON", {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+    },
+  });
 module.exports = mongoose.model("sections", sectionSchema);

@@ -21,11 +21,8 @@ const reviewSchema = mongoose.Schema({
   },
   likedUser: [
     {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        default: [],
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
   ],
   createAt: {
@@ -55,11 +52,18 @@ const reviewSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  images: [String],
 });
 
-reviewSchema.method("toJSON", function () {
-  const { __v, ...object } = this.toObject();
-  const { _id: id, ...result } = object;
-  return { ...result, id };
+// reviewSchema.method("toJSON", function () {
+//   const { __v, ...object } = this.toObject();
+//   const { _id: id, ...result } = object;
+//   return { ...result, id };
+// });
+reviewSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+  },
 });
 module.exports = mongoose.model("reviews", reviewSchema);

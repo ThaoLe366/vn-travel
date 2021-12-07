@@ -105,14 +105,14 @@ router.post("/login/users", async (req, res) => {
     try {
       const snapshot = await User.findOne({
         email: req.body.email,
-      });
+      }).populate("recentSearch.place");
+
       if (!snapshot) {
         return res.status(401).json({
           success: false,
           message: "Account not exist",
         });
       }
-
       const passwordHash = snapshot.password;
       const enterPassword = req.body.password;
 
@@ -264,10 +264,14 @@ router.post("/login/google", async (req, res, next) => {
 
 router.get("/verify", requireAuth, async (req, res) => {
   try {
+    const user = await User.findById(req.body.userAuth.id).populate(
+      "recentSearch.place"
+    );
+
     return res.status(200).json({
       message: "Token is valid",
       success: true,
-      user: req.body.userAuth,
+      user: user,
     });
   } catch (error) {
     console.log(error.message);

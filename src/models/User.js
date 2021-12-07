@@ -58,9 +58,14 @@ const userSchema = mongoose.Schema({
   ],
 });
 
-userSchema.method("toJSON", function () {
-  const { __v, ...object } = this.toObject();
-  const { _id: id, ...result } = object;
-  return { ...result, id };
+// userSchema.method("toJSON", function () {
+//   const { __v, ...object } = this.toObject();
+//   const { _id: id, ...result } = object;
+//   return { ...result, id };
+// });
+userSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+  },
 });
 module.exports = mongoose.model("users", userSchema);

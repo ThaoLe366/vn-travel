@@ -82,8 +82,9 @@ router.get("/:placeId", async (req, res) => {
 
     if (req.query.populate == "true") {
       //Get object foreign key
-      placeList = await Place.find({
+      placeList = await Place.findOne({
         _id: filterById,
+        status: STATUS.PUBLIC,
       })
         .populate("province")
         .populate("category")
@@ -307,10 +308,57 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
 );
 
 //TODO: Get popular place ( pick by admin )
+//@route GET v1/places/popular/:number
+//@desc Get popular place
+//@access public
+//@role any
+router.get("/popular/topRating", async (req, res) => {
+  try {
+    let places = await Place.find({
+      popular: true,
+      status: STATUS.PUBLIC,
+      rateVoting: { $gt: 3.5 },
+      viewCount: { $gt: 15 },
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
 
-//TODO: Get recent view of user
+    places = places.sort((a, b) => b.rateVoting - a.rateVoting);
 
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+//TODO: Get best rating
+router.get("/best-rating/top", async (req, res) => {
+  try {
+    let places = await Place.find({ rateVoting: { $gt: 4 } })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+
+    places = places.sort((a, b) => b.reviewCount - a.reviewCount);
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
 //TODO: Get the top 10 hot search place
+//@route PUT v1/places/category/:categoryId
+//@desc Update images description in this place
+//@access public
+//@role any
 router.get("/top-search/:number", async (req, res) => {
   try {
     let places = await Place.find({ viewCount: { $gt: 10 } })
@@ -321,7 +369,7 @@ router.get("/top-search/:number", async (req, res) => {
 
     places = places
       .sort((a, b) => b.viewCount - a.viewCount)
-      .slice(0, req.params.number);
+      .slice(0, req.params.number + 1);
     res.json({ success: true, message: "Get place successfully", places });
   } catch (error) {
     res.status(500).json({
@@ -410,6 +458,38 @@ router.get("/province/:provinceId", async (req, res) => {
 });
 //TODO: Get nearby places by place ID
 
+router.get("/nearBy/:provinceId/:placeId", async (req, res) => {
+  try {
+    let places = await Place.find({
+      province: req.params.provinceId,
+      status: STATUS.PUBLIC,
+    })
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+    let place = places.find((place) => place.id === req.params.placeId);
+    places = places.filter((place) => place.id !== req.params.placeId);
+    //Sort with distance
+
+    if (places)
+      places = places.sort(
+        (a, b) =>
+          Math.abs(place.lattitude - a.lattitude) +
+          Math.abs(place.longtitude - a.longtitude) -
+          (Math.abs(place.lattitude - b.lattitude) +
+            Math.abs(place.longtitude - b.longtitude))
+      );
+    res.json({ success: true, message: "Get place successfully", places });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+
 const handleSearch = (keyWord, items) => {
   if (keyWord === "") {
     //TODO: handel search for capital word
@@ -453,6 +533,43 @@ router.post("/suggestion", async (req, res) => {
     res.status(500).json({
       message: "Internal server error",
       success: false,
+    });
+  }
+});
+
+//@route POST v1/places/viewCount/:placeId
+//@desc PUT update viewCount
+//@access public
+//@role any
+router.put("/viewCount/:placeId", async (req, res) => {
+  try {
+    let place = await Place.findById(req.params.placeId);
+    if (!place) {
+      return res.status(404).json({
+        message: "Place not found ",
+      });
+    }
+
+    place = await Place.findByIdAndUpdate(
+      req.params.placeId,
+      { viewCount: place.viewCount + 1 },
+      { new: true }
+    )
+      .populate("province")
+      .populate("category")
+      .populate("tags")
+      .exec();
+
+    //Sort with rating
+    res.json({
+      success: true,
+      message: "Update view count successfully",
+      place,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
     });
   }
 });

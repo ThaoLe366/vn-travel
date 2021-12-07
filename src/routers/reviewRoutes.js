@@ -12,12 +12,14 @@ const updateRateVoting = require("../helpers/updateRateVoting");
 //@route POST v1/reviews
 //@desc create review
 //@access private
-//@role user
+//@role userS
+
+//TODO: SORT AND UPDATE REVIEW STATUS OF PLACES
 router.post("/", requireAuth, async (req, res, next) => {
   try {
     const reviewer = req.body.userAuth;
     //Validate
-    const { title, content, rate, visitedTime, place } = req.body;
+    const { title, content, rate, visitedTime, images, place } = req.body;
     if (!(title && content && rate && visitedTime && place))
       return res.status(400).json({
         success: false,
@@ -31,11 +33,48 @@ router.post("/", requireAuth, async (req, res, next) => {
       visitedTime: formatTimeUTC_(new Date(visitedTime)),
       user: reviewer.id,
       place: place,
+      images: images,
     });
 
     newReview = await newReview.save();
+    const placeUpdateRating = await Place.findById(place);
+    let reviewStatus = placeUpdateRating.reviewStatus;
+
+    switch (rate) {
+      case 1:
+        reviewStatus = { ...reviewStatus, terrible: reviewStatus.terrible + 1 };
+        break;
+      case 2:
+        reviewStatus = { ...reviewStatus, poor: reviewStatus.poor + 1 };
+        break;
+      case 3:
+        reviewStatus = { ...reviewStatus, average: reviewStatus.average + 1 };
+        break;
+      case 4:
+        reviewStatus = { ...reviewStatus, good: reviewStatus.good + 1 };
+        break;
+      case 5:
+        reviewStatus = {
+          ...reviewStatus,
+          excellent: reviewStatus.excellent + 1,
+        };
+        break;
+      default:
+        break;
+    }
+    let place_ = await Place.findOneAndUpdate(
+      { _id: place },
+      {
+        reviewStatus: reviewStatus,
+        reviewCount: placeUpdateRating.reviewCount + 1,
+      },
+      { new: true }
+    );
+    console.log(place_);
+
     if (newReview) {
       const resultUpdateVoting = await updateRateVoting(place);
+
       if (resultUpdateVoting) {
         return res.json({
           success: true,
@@ -61,7 +100,7 @@ router.post("/", requireAuth, async (req, res, next) => {
 //@desc GET review by placeId
 //@access private
 //@role
-router.get("/:placeId", requireAuth, async (req, res, next) => {
+router.get("/:placeId", async (req, res, next) => {
   try {
     const placeId = req.params.placeId;
     if (!mongoose.Types.ObjectId.isValid(placeId))
@@ -71,7 +110,10 @@ router.get("/:placeId", requireAuth, async (req, res, next) => {
       });
 
     let reviews = [];
-    reviews = await Review.find({ place: placeId, isHidden: false });
+    reviews = await Review.find({ place: placeId, isHidden: false }).populate(
+      "user",
+      ["_id", "image", "fullName"]
+    );
     if (reviews) {
       return res.json({
         success: true,
@@ -125,7 +167,10 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
       }
       review.likeCount--;
       review.updatedAt = formatTimeUTC();
-      const result = await review.save();
+      const result = await Review.findOneAndUpdate({ _id: review.id }, review, {
+        new: true,
+      });
+      await Review.populate(result, "user");
       if (result)
         return res.json({
           success: true,
@@ -138,10 +183,15 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
       });
     } else {
       //user liked review
+      console.log(user.id);
       review.likedUser.push(user.id);
       review.likeCount++;
       review.updatedAt = formatTimeUTC();
-      const result = await review.save();
+      const result = await Review.findOneAndUpdate({ _id: review.id }, review, {
+        new: true,
+      });
+      await Review.populate(result, "user");
+
       if (result)
         return res.json({
           success: true,
@@ -154,7 +204,7 @@ router.put("/liked/:reviewId", requireAuth, async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal error server",

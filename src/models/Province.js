@@ -35,9 +35,14 @@ const provinceSchema = mongoose.Schema({
   },
 });
 
-provinceSchema.method("toJSON", function () {
-  const { __v, ...object } = this.toObject();
-  const { _id: id, ...result } = object;
-  return { ...result, id };
+// provinceSchema.method("toJSON", function () {
+//   const { __v, ...object } = this.toObject();
+//   const { _id: id, ...result } = object;
+//   return { ...result, id };
+// });
+provinceSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+  },
 });
 exports.Province = mongoose.model("provinces", provinceSchema);

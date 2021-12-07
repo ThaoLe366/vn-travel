@@ -88,3 +88,11 @@ Content-Type: application/json
 {
     "text": "sư p"
 }
+
+####
+
+GET http://localhost:5000/app/api/v1/places/popular/topRating
+
+####
+
+GET http://localhost:5000/app/api/v1/places/nearBy/6191295841e6f727b4247a33/613b1da30ea0491390fa5bb0
