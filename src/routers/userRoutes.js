@@ -341,11 +341,11 @@ router.delete("/favorite/:placeId", requireAuth, async (req, res) => {
 //@desc Check is user use email and password to login
 //@access private
 //@role usr
-router.post("/loginPassword", requireAuth, async (req, res, next) => {
+router.get("/loginPassword/:email", async (req, res, next) => {
   try {
     //Get user
     const snapshot = await User.findOne({
-      email: req.body.userAuth.email,
+      email: req.params.email,
     });
     const passwordHash = snapshot.password;
     const dummy = "";
@@ -394,7 +394,7 @@ router.put("/password", async (req, res) => {
   const newPasswordHash = await bcrypt.hashSync(req.body.newPassword, salt);
   //Check password equal default password
   await bcrypt.compare(passwordCheck, passwordHash, function (err, result) {
-    console.log("Result ", result);
+    
     if (result == true) {
       User.findOneAndUpdate(
         { email: req.body.email },
@@ -409,7 +409,7 @@ router.put("/password", async (req, res) => {
             success: true,
           });
         } else {
-          console.log("Erro ", err);
+          console.log("Error ", err);
           return res.status(500).json({
             success: false,
             message: "Internal error server",
@@ -420,8 +420,8 @@ router.put("/password", async (req, res) => {
     } else {
       return res.status(401).json({
         message: "Incorrect password",
-        success: true,
-        isCanChangePassword: true,
+        success: false,
+    
       });
     }
   });
