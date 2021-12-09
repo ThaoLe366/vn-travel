@@ -226,12 +226,27 @@ router.post("/login/google", async (req, res, next) => {
       if (req.query.userRole) {
         if (String(snapshot.isUser) == req.query.userRole) {
           if (!snapshot.isHidden) {
-            return res.status(200).json({
-              message: "User login",
-              success: true,
-              user: snapshot,
-              token: req.headers.authorization,
-            });
+            //Check type login
+            const passwordHash = snapshot.password;
+            const dummy = "";
+            bcrypt.compare(dummy, passwordHash, function(err, result){
+              if(result==true){
+                return res.status(200).json({
+                  message: "User login",
+                  success: true,
+                  user: snapshot,
+                  token: req.headers.authorization,
+                });
+              }else{
+                return res.status(403).json({
+                  message:"Your account login in another way",
+                  success:false
+                })
+              }
+
+            }) 
+
+           
           } else {
             res.status(403).json({
               message: "Your account is blocked",
@@ -241,8 +256,8 @@ router.post("/login/google", async (req, res, next) => {
 
           //TODO: Update user
         } else {
-          return res.status(500).json({
-            message: "Bad information",
+          return res.status(403).json({
+            message: "Permission deny",
             count: 0,
             users: [],
           });

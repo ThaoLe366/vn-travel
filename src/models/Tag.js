@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const  {formatTimeUTC}  = require("../utils/Timezone");
+const { formatTimeUTC } = require("../utils/Timezone");
 
 const tagSchema = mongoose.Schema({
   name: {
@@ -21,11 +21,6 @@ const tagSchema = mongoose.Schema({
   },
 });
 
-// tagSchema.method("toJSON", function () {
-//   const { __v, ...object } = this.toObject();
-//   const { _id: id, ...result } = object;
-//   return { ...result, id };
-// });
 tagSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();

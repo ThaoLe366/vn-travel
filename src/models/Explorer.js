@@ -36,11 +36,6 @@ const explorerSchema = new mongoose.Schema({
     default: false,
   },
 });
-// explorerSchema.method("toJSON", function () {
-//   const { __v, ...object } = this.toObject();
-//   const { _id: id, ...result } = object;
-//   return { ...result, id };
-// });
 explorerSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();

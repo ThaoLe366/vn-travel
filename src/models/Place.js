@@ -109,18 +109,6 @@ const placeSchema = mongoose.Schema({
   },
 });
 
-// placeSchema.method("toJSON", function () {
-//   const { __v, ...object } = this.toObject();
-//   const { _id: id, ...result } = object;
-//   return { ...result, id };
-// });
-
-// placeSchema.set("toJSON", {
-//   transform: (document, returnedObject) => {
-//     returnedObject.id = returnedObject._id.toString();
-//     returnedObject._id = returnedObject._id.toString();
-//   },
-// });
 placeSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();

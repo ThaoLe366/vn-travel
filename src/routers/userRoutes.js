@@ -6,7 +6,7 @@ const requireAuth = require("../middleware/requireAuth");
 const requireRole = require("../middleware/requireRole");
 const { UserRefreshClient } = require("google-auth-library");
 const { formatTimeUTC } = require("../utils/Timezone");
-
+const bcrypt = require("bcrypt");
 //@route GET v1/users
 //@desc get all users
 //@access private
@@ -334,5 +334,96 @@ router.delete("/favorite/:placeId", requireAuth, async (req, res) => {
       message: "Internal error server",
     });
   }
+});
+
+//TODO: change password
+//@route POST v1/users/loginPassword
+//@desc Check is user use email and password to login
+//@access private
+//@role usr
+router.post("/loginPassword", requireAuth, async (req, res, next) => {
+  try {
+    //Get user
+    const snapshot = await User.findOne({
+      email: req.body.userAuth.email,
+    });
+    const passwordHash = snapshot.password;
+    const dummy = "";
+
+    //Check password equal default password
+    bcrypt.compare(dummy, passwordHash, function (err, result) {
+      if (result == true) {
+        //Login with some method like: Google... can not change password
+        return res.status(200).json({
+          message: "Login with Google",
+          success: true,
+          isCanChangePassword: false,
+        });
+      } else {
+        return res.status(200).json({
+          message: "Login with User name and password",
+          success: true,
+          isCanChangePassword: true,
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+});
+//@route PUT v1/users/password
+//@desc Change password
+//@access private
+//@role user
+router.put("/password", async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(401).json({
+      message: "Authentication failed!",
+      success: false,
+    });
+  }
+  const passwordHash = user.password;
+  const passwordCheck = req.body.password;
+  const salt = await bcrypt.genSaltSync(10);
+
+  const newPasswordHash = await bcrypt.hashSync(req.body.newPassword, salt);
+  //Check password equal default password
+  await bcrypt.compare(passwordCheck, passwordHash, function (err, result) {
+    console.log("Result ", result);
+    if (result == true) {
+      User.findOneAndUpdate(
+        { email: req.body.email },
+        {
+          password: newPasswordHash,
+        },
+        { new: true }
+      ).exec(function (err, documents) {
+        if (!err) {
+          return res.status(200).json({
+            message: "Changing password successful",
+            success: true,
+          });
+        } else {
+          console.log("Erro ", err);
+          return res.status(500).json({
+            success: false,
+            message: "Internal error server",
+          });
+        }
+      });
+      //Login with some method like: Google... can not change password
+    } else {
+      return res.status(401).json({
+        message: "Incorrect password",
+        success: true,
+        isCanChangePassword: true,
+      });
+    }
+  });
 });
 module.exports = router;

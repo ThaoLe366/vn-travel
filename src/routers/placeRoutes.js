@@ -410,7 +410,6 @@ router.get("/category/:categoryId", async (req, res) => {
 router.put("/find/tags", async (req, res, next) => {
   try {
     let tagsRequest = req.body.tags;
-    console.log("Thao ", tagsRequest);
 
     let places = await Place.find({
       tags: {

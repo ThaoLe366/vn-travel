@@ -1,10 +1,10 @@
 
 # @name login
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=true
 Content-Type: application/json
 
 {
-    "email": "thaole301000@gmail.com",
+    "email": "nhungle@gmail.com",
     "password" : "12345"
 }
 

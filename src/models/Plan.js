@@ -26,6 +26,7 @@ const planSchema = new mongoose.Schema({
     type: Date,
     default: formatTimeUTC,
   },
+  
   photoUrl: {
     type: String,
   },
@@ -45,11 +46,6 @@ const planSchema = new mongoose.Schema({
   ],
 });
 
-// planSchema.method("toJSON", function () {
-//   const { __v, ...object } = this.toObject();
-//   const { _id: id, ...result } = object;
-//   return { ...result, id };
-// });
 planSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
