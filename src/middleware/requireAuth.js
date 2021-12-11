@@ -17,12 +17,14 @@ const googleAuth = async (token) => {
 
 const requireAuth = async (req, res, next) => {
   const { authorization } = req.headers;
+  
   //If do not have token, return
   if (!authorization) {
     return res.status(401).json({
       message: "Access token not found",
     });
   }
+
   const token = authorization.split(" ")[1];
   //Try with token from google
   try {
@@ -47,18 +49,17 @@ const requireAuth = async (req, res, next) => {
       let user;
       jwt.verify(token, process.env.SECRET_KEY, function (err, payload) {
         if (typeof payload != "undefined") {
-          if(!payload.userAuth.isHidden){
+          if (!payload.userAuth.isHidden) {
             user = payload.userAuth;
             req.body.userAuth = user;
             req.headers.authorization = token;
             next();
-          }else{
+          } else {
             res.status(403).json({
               message: "Your account is blocked",
               success: false,
             });
           }
-        
         } else {
           return res.status(401).json({
             message: "Authentication failed!",

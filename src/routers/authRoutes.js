@@ -185,19 +185,20 @@ router.post("/login/google", async (req, res, next) => {
       });
     }
     const token = authorization.split(" ")[1];
-
     const user = await googleAuth(token);
-
     const snapshot = await User.findOne({
       email: user.email,
     });
-
     if (!snapshot) {
       if (String(req.query.userRole) === "true") {
+
+        const salt = await bcrypt.genSaltSync(10);
+        const createHashPassword = await bcrypt.hashSync("", salt);
+
         let newUser = new User({
           fullName: user.name,
           email: user.email,
-          password: "",
+          password: createHashPassword,
           image: user.picture,
         });
 
@@ -235,7 +236,7 @@ router.post("/login/google", async (req, res, next) => {
                   message: "User login",
                   success: true,
                   user: snapshot,
-                  token: req.headers.authorization,
+                  token: token,
                 });
               }else{
                 return res.status(403).json({

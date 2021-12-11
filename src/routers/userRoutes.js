@@ -387,6 +387,7 @@ router.put("/password", async (req, res) => {
       success: false,
     });
   }
+  
   const passwordHash = user.password;
   const passwordCheck = req.body.password;
   const salt = await bcrypt.genSaltSync(10);
@@ -394,7 +395,6 @@ router.put("/password", async (req, res) => {
   const newPasswordHash = await bcrypt.hashSync(req.body.newPassword, salt);
   //Check password equal default password
   await bcrypt.compare(passwordCheck, passwordHash, function (err, result) {
-    
     if (result == true) {
       User.findOneAndUpdate(
         { email: req.body.email },
@@ -418,10 +418,10 @@ router.put("/password", async (req, res) => {
       });
       //Login with some method like: Google... can not change password
     } else {
-      return res.status(401).json({
+      //CODE 406: Not acceptable
+      return res.status(204).json({
         message: "Incorrect password",
         success: false,
-    
       });
     }
   });
