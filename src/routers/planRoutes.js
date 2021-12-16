@@ -6,6 +6,7 @@ const router = express.Router();
 const requireAuth = require("../middleware/requireAuth");
 const requireRole = require("../middleware/requireRole");
 const { formatTimeUTC, formatTimeUTC_ } = require("../utils/Timezone");
+const Section = require("../models/Section");
 
 //@route GET v1/plans
 //@desc get plan by userId
@@ -149,17 +150,11 @@ router.delete("/:planId", requireAuth, async (req, res, next) => {
         message: "Invalid planId",
       });
 
-    let planUpdate = {
-      isHidden: true,
-      updatedAt: formatTimeUTC(),
-    };
-
-    planUpdate = await Plan.findOneAndUpdate(
-      { _id: req.params.planId, user: planer.id },
-      planUpdate,
-      { new: true }
-    );
-
+    let planUpdate = await Plan.findOneAndDelete({
+      _id: req.params.planId,
+    });
+    let result = await Section.deleteMany({ plan: req.params.planId });
+    console.log(result);
     if (planUpdate) {
       res.json({
         success: true,

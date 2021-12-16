@@ -56,7 +56,7 @@ Authorization: token {{authToken}}
 ### Add favorites
 PUT http://localhost:5000/app/api/v1/users/favorite/613f4f867963b61e40efe78a
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: Bearer {{authToken}}
 
 ### Delete favorites
 DELETE http://localhost:5000/app/api/v1/users/favorite/613f4f867963b61e40efe78a
@@ -86,7 +86,7 @@ Content-Type: application/json
 ### Change password
 PUT http://localhost:5000/app/api/v1/users/password
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjkzNDFhYmM0MDkyYjZmYzAzOGU0MDNjOTEwMjJkZDNlNDQ1MzliNTYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiOTI3ODU3Nzk1MDg1LTNldnR2Ymg1c3YzcjZtbjR0dnNnOXI3dW5xb2xwYXQ0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiOTI3ODU3Nzk1MDg1LTNldnR2Ymg1c3YzcjZtbjR0dnNnOXI3dW5xb2xwYXQ0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA5NTczNjMxMTc0ODM5OTExNDQ5IiwiZW1haWwiOiJ0aGFvbGUzMDEwMDBAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJhMmJ6YzVLUlVsdmtiVzhrMGh4eDBBIiwibmFtZSI6IlRo4bqjbyBMw6oiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2lTWnpQYzhiUGRzSmlyTjFTOW9Dc0J4SUZkVU1YQWp2S2Y1T1cxUUE9czk2LWMiLCJnaXZlbl9uYW1lIjoiVGjhuqNvIiwiZmFtaWx5X25hbWUiOiJMw6oiLCJsb2NhbGUiOiJ2aSIsImlhdCI6MTYzODk3NTkyNSwiZXhwIjoxNjM4OTc5NTI1LCJqdGkiOiJmZWUzZTNlMDg0ZDRmNGM1NWZmMjVkNDMyNTg4ZWExM2EzODI3NjhkIn0.G_bX2N05NjGzYIx9L1UfQetY8vX8u-uAdCAmSkrnIZ0fM-R8aL2ILUJqFsU5YaskeaZjzHHja2UeA2gj0IxdleEMyCckm7c7lB_GD2c6zOzkzleiA9a66BC0_9Fe052MUUzRwb5GJLJx3ZmMpgHLma1QZeX-gGFcVx4h5PVtTJQBXjvnbngyFCis9WNmU0FdrSBERjUgtsAfuIr8aX6lR0Ws01JCic4ykqM_yCt9b-5kEvePdSBGG9jmJwt8U2W7JWggkZEU5NejzGZOX48dnlz5r0mYOG__cmwV15jf434yrQms5z2xX4lNgyx8Wlin1WMkYK4utYsSH9smx8dBsg
+Authorization: Bearer 
 
 {
     "email":"thaole301000@gmail.com",
@@ -97,4 +97,27 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjkzNDFhYmM0MDkyYjZmYzAzOGU0MD
 ### Login gooogle 
 POST http://localhost:5000/app/api/v1/auths/login/google?userRole=true
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImMxODkyZWI0OWQ3ZWY5YWRmOGIyZTE0YzA1Y2EwZDAzMjcxNGEyMzciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5Mjc4NTc3OTUwODUtYTIyMWdmazk3dTlsMjhxNmF1aGZ1NXJyNDJ0bzY2dmMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5Mjc4NTc3OTUwODUtZThuNWJ2dTN0Z2dqZTk1cmJ0NnRzbjM4a2Y3Y3IzZnIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDk1NzM2MzExNzQ4Mzk5MTE0NDkiLCJlbWFpbCI6InRoYW9sZTMwMTAwMEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IlRo4bqjbyBMw6oiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2lTWnpQYzhiUGRzSmlyTjFTOW9Dc0J4SUZkVU1YQWp2S2Y1T1cxUUE9czk2LWMiLCJnaXZlbl9uYW1lIjoiVGjhuqNvIiwiZmFtaWx5X25hbWUiOiJMw6oiLCJsb2NhbGUiOiJ2aSIsImlhdCI6MTYzOTIzNTkzMCwiZXhwIjoxNjM5MjM5NTMwfQ.C_Nv7qWFTIzX-AVWOdI9AGkCSKlg3W8jGihjt5Y5r42BkDLr5DhCbIMyVQjOLCXpAjwTNhxdm-iL15NhukwijGKIz1c1YVwI9U6hOMUkUhzdjDMxWV_uukXRMPQaXJzqbb3-cBt1be1lbogo-S49xjMPEItk_iy8O8VRwO46WJYe4z40TOrWUu-qGyZm9pZxiE6hwvFLRSaviT8QdeEFYCZfF8bIW5qPw4XfCTb7VPRjX6pEJqX7e09RxtjtIjDimWFPdUuvY-Mf6J9_lBMpoU7DI7dIHZtg0gar1_Hl32B0jmt7bkROsZoF1jaUkywguAE0VnDzHDfRnw0VEsoxaQ
+Authorization: Bearer 
+
+### Check email exist
+GET http://localhost:5000/app/api/v1/auths/exists/18110366@student.hcmute.edu.vn
+Content-Type: application/json
+
+### Send code verify
+GET http://localhost:5000/app/api/v1/auths/send-email/thaole301000@gmail.com/123456
+Content-Type: application/json
+
+### Verify code user input
+GET http://localhost:5000/app/api/v1/auths/passwords/verify/123456/184807 
+Content-Type: application/json
+
+### Change password
+PUT http://localhost:5000/app/api/v1/auths/passwords 
+Content-Type: application/json
+
+{
+    "code":"123456",
+    "verifyCode":"184807",
+    "password":"123456",
+   "email": "18110366@student.hcmute.edu.vn"
+}

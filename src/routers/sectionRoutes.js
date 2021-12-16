@@ -47,8 +47,8 @@ router.post("/", requireAuth, async (req, res, next) => {
         { sections: section },
         { new: true }
       );
-      console.log(plan);
-
+      // console.log(plan);
+      newSection = await Section.populate(newSection, ["places.place"]);
       return res.json({
         success: true,
         message: "Create section successfully",
@@ -259,7 +259,7 @@ router.put("/:sectionId", requireAuth, async (req, res, next) => {
       { _id: req.params.sectionId },
       destination,
       { new: true }
-    );
+    ).populate("places.place");
 
     if (section)
       return res.json({

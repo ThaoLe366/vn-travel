@@ -10,6 +10,8 @@ const passport = require("passport");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const FacebookStrategy = require("passport-facebook").Strategy;
 const fetch = require("node-fetch");
+const { generateCode } = require("../utils/Timezone");
+const sendMail = require("../utils/sendMail");
 dotenv.config({
   path: "./config.env",
 });
@@ -191,7 +193,6 @@ router.post("/login/google", async (req, res, next) => {
     });
     if (!snapshot) {
       if (String(req.query.userRole) === "true") {
-
         const salt = await bcrypt.genSaltSync(10);
         const createHashPassword = await bcrypt.hashSync("", salt);
 
@@ -230,24 +231,21 @@ router.post("/login/google", async (req, res, next) => {
             //Check type login
             const passwordHash = snapshot.password;
             const dummy = "";
-            bcrypt.compare(dummy, passwordHash, function(err, result){
-              if(result==true){
+            bcrypt.compare(dummy, passwordHash, function (err, result) {
+              if (result == true) {
                 return res.status(200).json({
                   message: "User login",
                   success: true,
                   user: snapshot,
                   token: token,
                 });
-              }else{
+              } else {
                 return res.status(403).json({
-                  message:"Your account login in another way",
-                  success:false
-                })
+                  message: "Your account login in another way",
+                  success: false,
+                });
               }
-
-            }) 
-
-           
+            });
           } else {
             res.status(403).json({
               message: "Your account is blocked",
@@ -323,7 +321,6 @@ router.post("/login/facebook", async (req, res) => {
             success: false,
           });
         }
-        console.log(name, id);
         const snapshot = await User.findOne({
           email: id,
         });
@@ -389,4 +386,156 @@ router.post("/login/facebook", async (req, res) => {
     });
   }
 });
+//TODO: send email
+//@route GET v1/auths/send-email/:userEmail/:code
+//@desc Request send email to get code reset password
+//@access public
+//@role use
+router.get("/send-email/:userEmail/:code", async (req, res) => {
+  try {
+    //Get code and generate new code to send in Email
+    const clientCode = +req.params.code;
+    const verifyCode = generateCode(clientCode);
+
+    //Send to email
+    const html = `<p>Your verify code: ${verifyCode} </p>`;
+    sendMail(req.params.userEmail, "VNTravel - Verify forgot password",html);
+    return res.status(200).json({
+      message: "Send verify code successful",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal error server",
+    });
+  }
+});
+
+//TODO: Verify code request reset password
+//@route GET v1/auths/passwords/verify/:code/:verifyCode
+//@desc Verify correct code
+//@access public
+//@role all
+router.get("/passwords/verify/:code/:verifyCode", async (req, res) => {
+  try {
+    //Verify code
+    const code = +req.params.code;
+    const resultVerify = generateCode(code);
+    const verifyCode = req.params.verifyCode;
+    if (resultVerify == verifyCode) {
+      res.status(200).json({
+        message: "Verify code correct",
+        success: true,
+      });
+    } else {
+      res.status(403).json({
+        message: "Incorrect code",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(err.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal error server",
+    });
+  }
+});
+
+//TODO: Change password in forgot password
+//@route PUT v1/auths/passwords
+//@desc Change password with code and key
+//@access PUBLIC
+//@role all
+router.put("/passwords", async (req, res) => {
+  try {
+    //Body {code:"", verifyCode:"", password,"", email:""}
+    //Verify code
+    const code = +req.body.code;
+    const resultVerify = generateCode(code);
+    const verifyCode = req.body.verifyCode;
+
+    if (resultVerify == verifyCode) {
+      //Hash password
+      const salt = await bcrypt.genSaltSync(10);
+      const newPasswordHash = await bcrypt.hashSync(req.body.password, salt);
+      const user = await User.findOneAndUpdate(
+        { email: req.body.email },
+        { password: newPasswordHash },
+        { new: true }
+      ).exec(function (err, documents) {
+        if (!err) {
+          return res.status(200).json({
+            message: "Changing password successful",
+            success: true,
+          });
+        } else {
+          console.log("Error ", err);
+          return res.status(500).json({
+            success: false,
+            message: "Internal error server",
+          });
+        }
+      });
+    } else {
+      res.status(403).json({
+        message: "Incorrect code",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(err.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal error server",
+    });
+  }
+});
+
+//@route GET v1/auths/exists/:email
+//@desc Check email is exist in system
+//@access public
+//@role all
+router.get("/exists/:email", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) {
+      res.status(200).json({
+        message: "User not found",
+        success: false,
+        isExist: false,
+      });
+    } else {
+      const passwordHash = user.password;
+      const dummy = "";
+
+      bcrypt.compare(dummy, passwordHash, function (err, result) {
+        if (result == true) {
+          //Login with some method like: Google... can not change password
+          return res.status(200).json({
+            message: "Your account login in another way",
+            success: false,
+            isExist: false,
+          });
+        } else {
+          return res.status(200).json({
+            message: "Having user",
+            success: false,
+            isExist: true,
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.log(err.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal error server",
+    });
+  }
+});
+
 module.exports = router;

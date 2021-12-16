@@ -102,30 +102,48 @@ router.put("/favorite/:placeId", requireAuth, async (req, res) => {
       });
     }
     //TODO: Check place is existed in favorite
-
+    let user = await User.findById(req.body.userAuth.id);
+    let index = user.favorite.indexOf(req.params.placeId);
     const userUpdatedCondition = { _id: req.body.userAuth.id };
-    await User.findByIdAndUpdate(
-      userUpdatedCondition,
-      { $addToSet: { favorite: req.params.placeId } },
-      { new: true }
-    )
-      .populate("favorite")
-      .exec(function (err, user) {
-        if (!err) {
-          return res.status(200).json({
-            success: true,
-            message: "Update success",
-            user: user,
-          });
-        } else {
-          res.status(500).json({
-            success: false,
-            message: "Internal error server",
-          });
-        }
+
+    if (index >= 0) {
+      user = await User.findOneAndUpdate(
+        userUpdatedCondition,
+        { $pull: { favorite: req.params.placeId } },
+        { new: true }
+      ).populate("recentSearch.place");
+
+      return res.status(200).json({
+        success: true,
+        add: false,
+        message: "Delete success",
+        user: user,
       });
+    } else {
+      await User.findByIdAndUpdate(
+        userUpdatedCondition,
+        { $addToSet: { favorite: req.params.placeId } },
+        { new: true }
+      )
+        .populate("recentSearch.place")
+        .exec(function (err, user) {
+          if (!err) {
+            return res.status(200).json({
+              success: true,
+              message: "Update success",
+              user: user,
+              add: true,
+            });
+          } else {
+            res.status(500).json({
+              success: false,
+              message: "Internal error server",
+            });
+          }
+        });
+    }
   } catch (error) {
-    console.log(err.message);
+    console.log(error.message);
     res.status(500).json({
       success: false,
       message: "Internal error server",
@@ -313,6 +331,7 @@ router.delete("/favorite/:placeId", requireAuth, async (req, res) => {
       { new: true }
     )
       .populate("favorite")
+      .populate("recentSearch.place")
       .exec(function (err, user) {
         if (!err) {
           return res.status(200).json({
@@ -426,4 +445,5 @@ router.put("/password", async (req, res) => {
     }
   });
 });
+
 module.exports = router;
