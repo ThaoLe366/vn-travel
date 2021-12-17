@@ -130,7 +130,7 @@ router.post("/", requireAuth, async (req, res, next) =>
         start: start,
         end: end,
       },
-      popular: res.body.popular,
+      popular: req.body.popular,
     });
     try {
       place = await place.save();

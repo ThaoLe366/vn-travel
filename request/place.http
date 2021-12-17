@@ -13,12 +13,12 @@ Content-Type: application/json
 ###
 
 ### Create new place
-POST https://vntravel-api.herokuapp.com/app/api/v1/places
+POST  http://localhost:5000/app/api/v1/places
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-    "name": "CGV Tân Qui 66",
+    "name": "Phố cổ Hội An",
     "description": "Phố cổ Hội An là một thành phố nổi tiếng của tỉnh Quảng Nam, một phố cổ giữ được gần như nguyên vẹn với hơn 1000 di tích kiến trúc từ phố xá, nhà cửa, hội quán, đình, chùa, miếu, nhà thờ tộc, giếng cổ… đến các món ăn truyền thống, tâm hồn của người dân nơi đây. Một lần du lịch Hội An sẽ làm say đắm lòng du khách bởi những nét đẹp trường tồn cùng thời gian, vô cùng mộc mạc, bình dị.",
     "address":"TL 7",
     "longtitude": 15.8801,
@@ -26,13 +26,14 @@ Authorization: token {{authToken}}
     "tags":[],
     "rate": 5,
     "weight": 10,
-    "province" :"613ccc134d691c001680cc3f",
+    "province" :"6191295841e6f727b4247a33",
     "category":"612f41c7e410f520706e6428",
     "startPrice":"20000",
     "endPrice":"80000",
     "closeTime": "18:5",
     "openTime": "7:5",
-    "status":"public"
+    "status":"public", 
+    "popular":true
 
 }
 ### Add image to place
