@@ -57,16 +57,17 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSaltSync(10);
     const createHashPassword = await bcrypt.hashSync(req.body.password, salt);
     let user = new User({
-      fullName: req.body.fullName,
+      fullName: req.body.fullname,
       email: req.body.email,
       password: createHashPassword,
     });
+
     const snapshot = await User.find({
       email: req.body.email,
     });
     if (snapshot.length > 0) {
       return res.status(400).json({
-        message: "Username already taken",
+        message: "Email already taken",
         success: false,
       });
     }
@@ -77,13 +78,13 @@ router.post("/register", async (req, res) => {
           id: user.id,
           email: user.email,
           isUser: user.isUser,
-          picture: user.image,
+          image: user.image,
           name: user.fullName,
         },
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: "8h",
+        expiresIn: "24h",
       }
     );
     return res.status(200).json({
@@ -134,7 +135,7 @@ router.post("/login/users", async (req, res) => {
                 },
                 process.env.SECRET_KEY,
                 {
-                  expiresIn: "8h",
+                  expiresIn: "24h",
                 }
               );
               return res.status(200).json({
@@ -349,7 +350,6 @@ router.post("/login/facebook", async (req, res) => {
         } else {
           if (req.query.userRole) {
             if (String(snapshot.isUser) == req.query.userRole) {
-              //TODO: Update user
               return res.status(200).json({
                 message: "User login successfully",
                 success: true,
@@ -386,7 +386,6 @@ router.post("/login/facebook", async (req, res) => {
     });
   }
 });
-//TODO: send email
 //@route GET v1/auths/send-email/:userEmail/:code
 //@desc Request send email to get code reset password
 //@access public
@@ -414,7 +413,6 @@ router.get("/send-email/:userEmail/:code", async (req, res) => {
   }
 });
 
-//TODO: Verify code request reset password
 //@route GET v1/auths/passwords/verify/:code/:verifyCode
 //@desc Verify correct code
 //@access public
@@ -445,7 +443,6 @@ router.get("/passwords/verify/:code/:verifyCode", async (req, res) => {
   }
 });
 
-//TODO: Change password in forgot password
 //@route PUT v1/auths/passwords
 //@desc Change password with code and key
 //@access PUBLIC

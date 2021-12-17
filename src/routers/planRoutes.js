@@ -113,7 +113,7 @@ router.put("/:planId", requireAuth, async (req, res, next) => {
       name: req.body.name ? req.body.name : originPlan.name,
       start: req.body.start ? req.body.start : originPlan.start,
       end: req.body.end ? req.body.end : originPlan.end,
-      note: req.body.note ? req.body.note : originPlan.note,
+      note: req.body.note,
       photoUrl: req.body.photoUrl ? req.body.photoUrl : originPlan.photoUrl,
       updatedAt: formatTimeUTC(),
     };
@@ -152,6 +152,7 @@ router.delete("/:planId", requireAuth, async (req, res, next) => {
 
     let planUpdate = await Plan.findOneAndDelete({
       _id: req.params.planId,
+      user: planer.id,
     });
     let result = await Section.deleteMany({ plan: req.params.planId });
     console.log(result);
