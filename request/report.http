@@ -1,9 +1,9 @@
 # @name login
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=true
 Content-Type: application/json
 
 {
-    "email": "thaole301000@gmail.com",
+    "email": "nhungle@gmail.com",
     "password" : "12345"
 }
 
@@ -16,8 +16,8 @@ Authorization: token {{authToken}}
 
 {
    "reason":"Xúc phạm , làm ảnh hưởng đến người khác",
-    "review": "6155764141338b4a486073f2",
-    "reporter": "61556bd4652d5221f427f92e"
+    "review": "61bcbbeb0ca8f125347f34a3",
+    "reporter": "618dccf03e651a0e00fb15ca"
 }
 
 ###

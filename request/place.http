@@ -1,6 +1,6 @@
 
 # @name login
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
+POST http://localhost:5000/app/api/v1/auths/login/users?userRole=false
 Content-Type: application/json
 
 {
@@ -12,30 +12,31 @@ Content-Type: application/json
 @authToken = {{login.response.body.token}}
 ###
 
+
 ### Create new place
 POST  http://localhost:5000/app/api/v1/places
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: Bearer {{authToken}}
 
 {
-    "name": "Phố cổ Hội An",
+    "popular": true,
+    "name": "Phổ cố Hội An 3",
     "description": "Phố cổ Hội An là một thành phố nổi tiếng của tỉnh Quảng Nam, một phố cổ giữ được gần như nguyên vẹn với hơn 1000 di tích kiến trúc từ phố xá, nhà cửa, hội quán, đình, chùa, miếu, nhà thờ tộc, giếng cổ… đến các món ăn truyền thống, tâm hồn của người dân nơi đây. Một lần du lịch Hội An sẽ làm say đắm lòng du khách bởi những nét đẹp trường tồn cùng thời gian, vô cùng mộc mạc, bình dị.",
     "address":"TL 7",
-    "longtitude": 15.8801,
-    "lattitude": 108.3380,
+    "longtitude": 16,
+    "lattitude": 109,
     "tags":[],
     "rate": 5,
     "weight": 10,
-    "province" :"6191295841e6f727b4247a33",
-    "category":"612f41c7e410f520706e6428",
+    "province" :"61cbd14cb4f4a82710201f7f",
+    "category":"61cbd194b4f4a82710201f82",
     "startPrice":"20000",
     "endPrice":"80000",
     "closeTime": "18:5",
     "openTime": "7:5",
-    "status":"public", 
-    "popular":true
-
+    "status":"public"
 }
+
 ### Add image to place
 POST http://localhost:5000/app/api/v1/places/613add51a784f131b084e56e/images
 Content-Type: application/json
@@ -65,23 +66,20 @@ Authorization: token {{authToken}}
     ]
 }
 ###FIND PLACES CONTAIN TAG ID
-PUT http://localhost:5000/app/api/v1/places/find/tags
+PUT http://localhost:5000/app/api/v1/places/explores/tags
 Content-Type: application/json
-Authorization: token {{authToken}}
 
 {
-    "tags":["614c287428cff4001670150c", "614c018a27c6e100160c06fc"]
+    "tags":["613ea5e3a6243319d4e0cad3", "614c018a27c6e100160c06fc"]
 }
 
 #### GET PLACE OF ONE CATEGORY
 GET http://localhost:5000/app/api/v1/places/category/612f41c7e410f520706e6428
 Content-Type: application/json
-Authorization: token {{authToken}}
 
 #### GET PLACE OF ONE province
 GET http://localhost:5000/app/api/v1/places/province/612f41c7e410f520706e6428
 Content-Type: application/json
-Authorization: token {{authToken}}
 ###
 POST http://localhost:5000/app/api/v1/places/suggestion
 Content-Type: application/json
@@ -94,6 +92,32 @@ Content-Type: application/json
 
 GET http://localhost:5000/app/api/v1/places/popular/topRating
 
+
+
+### Create new place
+PUT  http://localhost:5000/app/api/v1/places/61cbd802b4f4a82710201fa5
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "popular": true,
+    "name": "Phổ cố Hội An 4",
+    "description": "Phố cổ Hội An là một thành phố nổi tiếng của tỉnh Quảng Nam, một phố cổ giữ được gần như nguyên vẹn với hơn 1000 di tích kiến trúc từ phố xá, nhà cửa, hội quán, đình, chùa, miếu, nhà thờ tộc, giếng cổ… đến các món ăn truyền thống, tâm hồn của người dân nơi đây. Một lần du lịch Hội An sẽ làm say đắm lòng du khách bởi những nét đẹp trường tồn cùng thời gian, vô cùng mộc mạc, bình dị.",
+    "address":"TL 7",
+    "lattitude": 16.01234,
+    "longtitude":109.12345,
+    "tags":[],
+    "rate": 5,
+    "weight": 10,
+    "province" :"61cbd14cb4f4a82710201f7f",
+    "category":"61cbd194b4f4a82710201f82",
+    "startPrice":"20000",
+    "endPrice":"80000",
+    "closeTime": "18:5",
+    "openTime": "7:5",
+    "status":"public"
+}
+
 ####
 
-GET http://localhost:5000/app/api/v1/places/nearBy/6191295841e6f727b4247a33/613b1da30ea0491390fa5bb0
+GET http://localhost:5000/app/api/v1/places/nearBy/106.51292657870387/11.087526975265133?distance=500&category=61645bcaa7040c0016bf4c80

@@ -107,6 +107,10 @@ const placeSchema = mongoose.Schema({
       default: 0,
     },
   },
+  geometry: {
+    "type": { "type": String, default:'Point' },
+    "coordinates": []
+}
 });
 
 placeSchema.set("toJSON", {

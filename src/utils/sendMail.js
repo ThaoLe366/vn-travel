@@ -1,18 +1,16 @@
-
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(
-  "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"
+  "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"
 );
 
-const adminEmail = "mikefrencele@gmail.com";
+const adminEmail = "ngungungu313131@gmail.com";
 const adminPassword = "Admin&&&:)))";
-
 
 const sendMail = (toEmail, sub, htmlContent) => {
   const msg = {
     to: toEmail,
     from: adminEmail, // Use the email address or domain you verified above
-    subject: "Verify your account ",
+    subject: "Verify your account from VNTravel",
     text: sub,
     html: htmlContent,
   };

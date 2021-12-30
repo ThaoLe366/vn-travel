@@ -131,6 +131,10 @@ router.post("/", requireAuth, async (req, res, next) =>
         end: end,
       },
       popular: req.body.popular,
+      geometry: {
+        type: "Point",
+        coordinates: [req.body.longtitude ?? 0, req.body.lattitude ?? 0],
+      },
     });
     try {
       place = await place.save();
@@ -191,27 +195,33 @@ router.put("/:placeId", requireAuth, async (req, res, next) =>
           _id: req.params.placeId,
         },
         {
-          name: req.body.name,
-          description: req.body.description,
-          longtitude: req.body.longtitude,
-          lattitude: req.body.lattitude,
-          address: req.body.address,
-          tags: req.body.tags,
-          rate: req.body.rate,
-          weight: req.body.weight,
-          province: req.body.province,
-          category: req.body.category,
-          status: status,
-          closeTime: req.body.closeTime,
-          openTime: req.body.openTime,
-          price: {
-            start: start,
-            end: end,
+          $set: {
+            name: req.body.name,
+            description: req.body.description,
+            longtitude: req.body.longtitude,
+            lattitude: req.body.lattitude,
+            address: req.body.address,
+            tags: req.body.tags,
+            rate: req.body.rate,
+            weight: req.body.weight,
+            province: req.body.province,
+            category: req.body.category,
+            status: status,
+            closeTime: req.body.closeTime,
+            openTime: req.body.openTime,
+            price: {
+              start: start,
+              end: end,
+            },
+            reviewStatus: req.body.reviewStatus,
+            viewCount: req.body.viewCount,
+            updatedAt: formatTimeUTC(),
+            popular: req.body.popular,
+            geometry: {
+              type: "Point",
+              coordinates: [req.body.longtitude ?? 0, req.body.lattitude ?? 0],
+            },
           },
-          reviewStatus: req.body.reviewStatus,
-          viewCount: req.body.viewCount,
-          updatedAt: formatTimeUTC(),
-          popular: req.body.popular,
         },
         { new: true }
       );
@@ -312,13 +322,14 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
 //@desc Get popular place
 //@access public
 //@role any
+
 router.get("/popular/topRating", async (req, res) => {
   try {
     let places = await Place.find({
       popular: true,
       status: STATUS.PUBLIC,
       rateVoting: { $gt: 3.5 },
-      viewCount: { $gt: 15 },
+      // viewCount: { $gt: 15 },
     })
       .populate("province")
       .populate("category")
@@ -378,6 +389,7 @@ router.get("/top-search/:number", async (req, res) => {
     });
   }
 });
+
 //TODO: Get place by category id
 //@route PUT v1/places/category/:categoryId
 //@desc Update images description in this place
@@ -405,9 +417,11 @@ router.get("/category/:categoryId", async (req, res) => {
   }
 });
 
-//TODO: Get place by tags
-
-router.put("/find/tags", async (req, res, next) => {
+//@route PUT v1/places/find/tags
+//@desc Update images description in this place
+//@access public
+//@role any
+router.put("/explores/tags", async (req, res, next) => {
   try {
     let tagsRequest = req.body.tags;
 
@@ -419,7 +433,7 @@ router.put("/find/tags", async (req, res, next) => {
     })
       .populate("province")
       .populate("category")
-      .populate("tags")
+      // .populate("tags")
       .exec();
 
     //Sort with rating
@@ -433,7 +447,6 @@ router.put("/find/tags", async (req, res, next) => {
   }
 });
 
-//TODO: Get place of a province by province ID
 router.get("/province/:provinceId", async (req, res) => {
   try {
     let places = await Place.find({
@@ -455,30 +468,61 @@ router.get("/province/:provinceId", async (req, res) => {
     });
   }
 });
-//TODO: Get nearby places by place ID
 
-router.get("/nearBy/:provinceId/:placeId", async (req, res) => {
+router.get("/nearBy/:lng/:lat", async (req, res) => {
   try {
-    let places = await Place.find({
-      province: req.params.provinceId,
-      status: STATUS.PUBLIC,
-    })
-      .populate("province")
-      .populate("category")
-      .populate("tags")
-      .exec();
-    let place = places.find((place) => place.id === req.params.placeId);
-    places = places.filter((place) => place.id !== req.params.placeId);
-    //Sort with distance
+    // let places = await Place.find({
+    //   province: req.params.provinceId,
+    //   status: STATUS.PUBLIC,
+    // })
+    //   .populate("province")
+    //   .populate("category")
+    //   .populate("tags")
+    //   .exec();
+    // let place = places.find((place) => place.id === req.params.placeId);
+    // places = places.filter((place) => place.id !== req.params.placeId);
+    // //Sort with distance
 
-    if (places)
-      places = places.sort(
-        (a, b) =>
-          Math.abs(place.lattitude - a.lattitude) +
-          Math.abs(place.longtitude - a.longtitude) -
-          (Math.abs(place.lattitude - b.lattitude) +
-            Math.abs(place.longtitude - b.longtitude))
-      );
+    // if (places)
+    //   places = places.sort(
+    //     (a, b) =>
+    //       Math.abs(place.lattitude - a.lattitude) +
+    //       Math.abs(place.longtitude - a.longtitude) -
+    //       (Math.abs(place.lattitude - b.lattitude) +
+    //         Math.abs(place.longtitude - b.longtitude))
+    //   );
+    // res.json({ success: true, message: "Get place successfully", places });
+    const distance = req.query.distance ?? 10000;
+    const category = req.query.category ?? "";
+    console.log("Query ", distance, category)
+    let places = [];
+    if (category) {
+      places = await Place.find({
+        geometry: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [req.params.lng, req.params.lat],
+            },
+            $maxDistance: distance,
+          },
+        },
+        category: category,
+      });
+    } else {
+      places = await Place.find({
+        geometry: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [req.params.lng, req.params.lat],
+            },
+            $maxDistance: distance,
+          },
+        },
+      });
+    }
+    console.log("Count ", places.length)
     res.json({ success: true, message: "Get place successfully", places });
   } catch (error) {
     console.log(error);
@@ -491,7 +535,6 @@ router.get("/nearBy/:provinceId/:placeId", async (req, res) => {
 
 const handleSearch = (keyWord, items) => {
   if (keyWord === "") {
-    //TODO: handel search for capital word
     return items;
   } else
     return [

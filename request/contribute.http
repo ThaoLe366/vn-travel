@@ -1,9 +1,9 @@
 # @name login
-POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=false
+POST https://vntravel-api.herokuapp.com/app/api/v1/auths/login/users?userRole=true
 Content-Type: application/json
 
 {
-    "email": "thaole301000@gmail.com",
+    "email": "nhungle@gmail.com",
     "password" : "12345"
 }
 
@@ -15,11 +15,11 @@ Content-Type: application/json
 
 POST https://vntravel-api.herokuapp.com/app/api/v1/contributes
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: Bearer {{authToken}}
 
 {
-    "content": "Tôi nghĩ các bạn nên thay đổi hình ảnh cho phù hợp hơn.",
-    "place": "6142ada97a66e700160ca5a9"
+    "content": "Nội dung không đúng sự thật",
+    "place": "61bcb2254eeca820dcf7fa11"
 }
 
 ### Get all contribute

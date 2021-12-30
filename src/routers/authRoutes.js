@@ -71,7 +71,10 @@ router.post("/register", async (req, res) => {
         success: false,
       });
     }
+
     user = await user.save();
+    user = await User.populate(user, ["recentSearch.place"]);
+
     const tokenGenerate = jwt.sign(
       {
         userAuth: {
@@ -205,6 +208,7 @@ router.post("/login/google", async (req, res, next) => {
         });
 
         newUser = await newUser.save();
+        newUser = await User.populate(newUser, ["recentSearch.place"]);
 
         if (!newUser) {
           return res.status(500).json({
@@ -232,6 +236,10 @@ router.post("/login/google", async (req, res, next) => {
             //Check type login
             const passwordHash = snapshot.password;
             const dummy = "";
+            snapshot = await User.populate(snapshot, [
+              "recentSearch.place",
+              "favorite",
+            ]);
             bcrypt.compare(dummy, passwordHash, function (err, result) {
               if (result == true) {
                 return res.status(200).json({
@@ -398,7 +406,7 @@ router.get("/send-email/:userEmail/:code", async (req, res) => {
 
     //Send to email
     const html = `<p>Your verify code: ${verifyCode} </p>`;
-    sendMail(req.params.userEmail, "VNTravel - Verify forgot password",html);
+    sendMail(req.params.userEmail, "VNTravel - Verify forgot password", html);
     return res.status(200).json({
       message: "Send verify code successful",
       success: true,

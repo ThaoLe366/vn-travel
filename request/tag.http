@@ -10,12 +10,12 @@ Content-Type: application/json
 ###
 @authToken = {{login.response.body.token}}
 ###
-POST https://vntravel-api.herokuapp.com/app/api/v1/tags
+POST http://localhost:5000/app/api/v1/tags
 Content-Type: application/json
 Authorization: token {{authToken}}
 
 {
-   "name":"Cà phê phố",
+   "name":"Đồi núi",
    "isHidden":false
 
 }
