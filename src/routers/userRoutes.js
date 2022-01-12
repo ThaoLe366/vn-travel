@@ -2,11 +2,16 @@ const User = require("../models/User");
 const Place = require("../models/Place");
 const express = require("express");
 const router = express.Router();
+const https = require("http");
 const requireAuth = require("../middleware/requireAuth");
 const requireRole = require("../middleware/requireRole");
 const { UserRefreshClient } = require("google-auth-library");
 const { formatTimeUTC } = require("../utils/Timezone");
 const bcrypt = require("bcrypt");
+const axios = require("axios");
+
+
+const { request } = require("express");
 //@route GET v1/users
 //@desc get all users
 //@access private
@@ -406,7 +411,7 @@ router.put("/password", async (req, res) => {
       success: false,
     });
   }
-  
+
   const passwordHash = user.password;
   const passwordCheck = req.body.password;
   const salt = await bcrypt.genSaltSync(10);
@@ -444,6 +449,37 @@ router.put("/password", async (req, res) => {
       });
     }
   });
+});
+
+router.post("/translate", (req, res) => {
+  var q = req.body.q;
+  console.log(q);
+  var lang = req.body.lang ? req.body.lang : "vi";
+  const response = axios
+    .post(
+      "https://translation.googleapis.com/language/translate/v2",
+      {},
+      {
+        params: {
+          q: q,
+          target: lang,
+          key: "AIzaSyAAWuBzltf546OYRpBf7x8Ii2l6-b5RSrw",
+        },
+      }
+    )
+    .then((response) => {
+      res.json({
+        success: true,
+        message: "Success",
+        data: response.data.data.translations[0].translatedText,
+      });
+    })
+    .catch((err) => {
+      console.log("rest api error", err);
+      res
+        .status(400)
+        .json({ message: "Some error happen", data: "", success: false });
+    });
 });
 
 module.exports = router;

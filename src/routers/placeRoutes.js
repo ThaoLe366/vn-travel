@@ -322,14 +322,21 @@ router.put("/:placeId/images", requireAuth, async (req, res, next) =>
 //@desc Get popular place
 //@access public
 //@role any
-
 router.get("/popular/topRating", async (req, res) => {
   try {
+    let categorySelected = [
+      "61542c1f933a190016ab8b84",
+      "61645bdca7040c0016bf4c88",
+      "61bcab074b3c220016559fc5",
+      "61bcad0c425e06001651abc8",
+      "61bcb56e4eeca820dcf7fa74",
+    ];
     let places = await Place.find({
       popular: true,
       status: STATUS.PUBLIC,
       rateVoting: { $gt: 3.5 },
       // viewCount: { $gt: 15 },
+      category: { $in: categorySelected },
     })
       .populate("province")
       .populate("category")
@@ -494,7 +501,7 @@ router.get("/nearBy/:lng/:lat", async (req, res) => {
     // res.json({ success: true, message: "Get place successfully", places });
     const distance = req.query.distance ?? 10000;
     const category = req.query.category ?? "";
-    console.log("Query ", distance, category)
+    console.log("Query ", distance, category);
     let places = [];
     if (category) {
       places = await Place.find({
@@ -508,7 +515,10 @@ router.get("/nearBy/:lng/:lat", async (req, res) => {
           },
         },
         category: category,
-      });
+      })
+        .populate("province")
+        .populate("category")
+        .populate("tags");
     } else {
       places = await Place.find({
         geometry: {
@@ -520,9 +530,12 @@ router.get("/nearBy/:lng/:lat", async (req, res) => {
             $maxDistance: distance,
           },
         },
-      });
+      })
+        .populate("province")
+        .populate("category")
+        .populate("tags");
     }
-    console.log("Count ", places.length)
+    console.log("Count ", places.length);
     res.json({ success: true, message: "Get place successfully", places });
   } catch (error) {
     console.log(error);

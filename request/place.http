@@ -121,3 +121,6 @@ Authorization: Bearer {{authToken}}
 ####
 
 GET http://localhost:5000/app/api/v1/places/nearBy/106.51292657870387/11.087526975265133?distance=500&category=61645bcaa7040c0016bf4c80
+
+### 
+GET http://localhost:5000/app/api/v1/places/nearBy/106.5151712/11.08935472?distance=500

@@ -12,12 +12,11 @@ Content-Type: application/json
 ###
 POST http://localhost:5000/app/api/v1/reports
 Content-Type: application/json
-Authorization: token {{authToken}}
+Authorization: Bearer {{authToken}}
 
 {
    "reason":"Xúc phạm , làm ảnh hưởng đến người khác",
-    "review": "61bcbbeb0ca8f125347f34a3",
-    "reporter": "618dccf03e651a0e00fb15ca"
+    "review": "61bca01b4eeca820dcf7f9c0"
 }
 
 ###
